@@ -31,10 +31,10 @@
           <br><br>
           <button class="btn btn-outline" onclick="showSignup()">Sign Up</button>
           <br><br>
-          <span class="forgot" onclick="alert('Contact admin to reset password.')">Forgot Password?</span>
+          <span class="forgot">Forgot Password?</span>
         </div>
 
-        <!-- Signup Form (শুরুতে লুকানো থাকবে) -->
+        <!-- Signup Form -->
         <div id="signupForm" style="display:none;">
           <div class="form-group">
             <input type="text" id="signupName" placeholder="Full Name" />
@@ -56,9 +56,13 @@
           <button class="btn btn-outline" onclick="showLogin()">Back to Login</button>
         </div>
 
+        <!-- Loading text -->
+        <div id="loadingMsg" style="display:none; color:#4a7c3f; margin-top:10px;">
+          Please wait...
+        </div>
+
         <div class="login-img">🧑‍🌾</div>
 
-        <!-- Bottom Buttons -->
         <div class="btn-row" style="justify-content:center; margin-top:15px;">
           <a href="role.html" class="btn btn-back btn-small">Back</a>
           <a href="index.html" class="btn btn-back btn-small">Return Home</a>
@@ -68,87 +72,124 @@
     </div>
   </div>
 
-  <script>
-    // URL থেকে role বের করো
+  <script type="module">
+    // Firebase import
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyB2C0Uf6NWWqUkp3kCAeAoFXq7k5GeVzgc",
+      authDomain: "agrosmart-4e1fe.firebaseapp.com",
+      projectId: "agrosmart-4e1fe",
+      storageBucket: "agrosmart-4e1fe.firebasestorage.app",
+      messagingSenderId: "448300580974",
+      appId: "1:448300580974:web:0ae670c92892f1ae77267f"
+    };
+
+    // Firebase initialize
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    
     const params = new URLSearchParams(window.location.search);
     const role = params.get('role') || 'farmer';
 
-    // Login এর কাজ
-    function doLogin() {
+    // Login
+    window.doLogin = async function() {
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
 
-      if (email === '' || password === '') {
+      if (!email || !password) {
         alert('Please fill in all fields!');
         return;
       }
 
-      // LocalStorage থেকে user খোঁজো
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = users.find(u => u.email === email && u.password === password);
+      document.getElementById('loadingMsg').style.display = 'block';
 
-      if (user) {
-        // Login সফল হলে user info save করো
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
+      try {
+        
+        const q = query(
+          collection(db, "users"),
+          where("email", "==", email),
+          where("password", "==", password)
+        );
+        const snapshot = await getDocs(q);
 
-        // Role অনুযায়ী dashboard এ পাঠাও
-        if (user.role === 'farmer') {
-          window.location.href = 'farmer-dashboard.html';
-        } else if (user.role === 'student') {
-          window.location.href = 'student-dashboard.html';
-        } else if (user.role === 'worker') {
-          window.location.href = 'agri-dashboard.html';
+        document.getElementById('loadingMsg').style.display = 'none';
+
+        if (!snapshot.empty) {
+          const user = snapshot.docs[0].data();
+          
+          localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+          
+          if (user.role === 'farmer') {
+            window.location.href = 'farmer-dashboard.html';
+          } else if (user.role === 'student') {
+            window.location.href = 'student-dashboard.html';
+          } else if (user.role === 'worker') {
+            window.location.href = 'agri-dashboard.html';
+          }
+        } else {
+          alert('Wrong email or password! Please sign up first.');
         }
-      } else {
-        alert('Email or password is wrong! Please sign up first.');
+      } catch (e) {
+        document.getElementById('loadingMsg').style.display = 'none';
+        alert('Error: ' + e.message);
       }
     }
 
-    // Signup এর কাজ
-    function doSignup() {
+    // Signup
+    window.doSignup = async function() {
       const name = document.getElementById('signupName').value;
       const email = document.getElementById('signupEmail').value;
       const password = document.getElementById('signupPassword').value;
       const mobile = document.getElementById('signupMobile').value;
       const location = document.getElementById('signupLocation').value;
 
-      if (name === '' || email === '' || password === '') {
+      if (!name || !email || !password) {
         alert('Please fill name, email and password!');
         return;
       }
 
-      // নতুন user বানাও
-      const newUser = {
-        name: name,
-        email: email,
-        password: password,
-        mobile: mobile,
-        location: location,
-        role: role,
-        userId: 'USR' + Date.now()
-      };
+      document.getElementById('loadingMsg').style.display = 'block';
 
-      // LocalStorage এ save করো
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
+      try {
+        
+        const newUser = {
+          name: name,
+          email: email,
+          password: password,
+          mobile: mobile,
+          location: location,
+          role: role,
+          userId: 'USR' + Date.now()
+        };
 
-      alert('Account created successfully! Please login now.');
-      showLogin();
+        await addDoc(collection(db, "users"), newUser);
+
+        document.getElementById('loadingMsg').style.display = 'none';
+        alert('Account created successfully! Please login now.');
+        showLogin();
+
+      } catch (e) {
+        document.getElementById('loadingMsg').style.display = 'none';
+        alert('Error: ' + e.message);
+      }
     }
 
-    // Signup form দেখাও
-    function showSignup() {
+    // Forms toggle
+    window.showSignup = function() {
       document.getElementById('loginForm').style.display = 'none';
       document.getElementById('signupForm').style.display = 'block';
     }
 
-    // Login form দেখাও
-    function showLogin() {
+    window.showLogin = function() {
       document.getElementById('signupForm').style.display = 'none';
       document.getElementById('loginForm').style.display = 'block';
     }
   </script>
-<script type="module" src="firebase-config.js"></script>
+
 </body>
 </html>
