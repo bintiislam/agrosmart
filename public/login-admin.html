@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Admin Login</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Login Box -->
+  <div class="page-container">
+    <div class="login-page">
+
+      <div class="login-box">
+        <h2>Login to AgroSmart</h2>
+        <p style="color:#666; font-size:0.85rem; margin-bottom:15px;">Admin Panel</p>
+
+        <div class="form-group">
+          <input type="text" id="adminEmail" placeholder="Admin Email" />
+        </div>
+        <div class="form-group">
+          <input type="password" id="adminPassword" placeholder="Password" />
+        </div>
+
+        <button class="btn btn-green" onclick="adminLogin()">Login</button>
+        <br><br>
+        <span class="forgot">Forgot Password?</span>
+
+        <div class="login-img">🧑‍🌾</div>
+
+        <div class="btn-row" style="justify-content:center; margin-top:15px;">
+          <a href="role.html" class="btn btn-back btn-small">Back</a>
+          <a href="index.html" class="btn btn-back btn-small">Return Home</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function adminLogin() {
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPassword').value;
+
+      // Admin এর fixed email & password
+      if (email === 'admin@agrosmart.com' && password === 'admin123') {
+        localStorage.setItem('adminLogged', 'true');
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        alert('Wrong email or password!\n\nEmail: admin@agrosmart.com\nPassword: admin123');
+      }
+    }
+  </script>
+
+</body>
+</html>

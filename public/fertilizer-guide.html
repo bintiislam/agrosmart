@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Fertilizer Guide</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="page-container">
+    <div class="fertilizer-box">
+
+      <h2>🧪 Fertilizer Guide</h2>
+
+      <!-- Crop Select -->
+      <div class="form-group">
+        <label>Select Crop:</label>
+        <select id="cropSelect" onchange="showFertilizer()">
+          <option value="">-- Select Crop --</option>
+          <option value="Rice">Rice</option>
+          <option value="Wheat">Wheat</option>
+          <option value="Tomato">Tomato</option>
+          <option value="Maize">Maize</option>
+          <option value="Potato">Potato</option>
+          <option value="Jute">Jute</option>
+        </select>
+      </div>
+
+      <!-- Fertilizer Result (শুরুতে লুকানো) -->
+      <div class="fertilizer-result" id="fertResult" style="display:none;">
+        <h3>Fertilizer Recommendation</h3>
+        <table id="fertTable">
+        </table>
+      </div>
+
+      <!-- Bottom Buttons -->
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="history.back()">Back</button>
+        <a href="index.html" class="btn btn-back">Return Home</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // প্রতিটা crop এর fertilizer data
+    const fertData = {
+      Rice: [
+        ['Urea (Nitrogen)', '80 kg/acre'],
+        ['TSP (Phosphorus)', '55 kg/acre'],
+        ['MOP (Potassium)', '40 kg/acre'],
+        ['Gypsum (Sulfur)', '30 kg/acre']
+      ],
+      Wheat: [
+        ['Urea (Nitrogen)', '65 kg/acre'],
+        ['TSP (Phosphorus)', '50 kg/acre'],
+        ['MOP (Potassium)', '30 kg/acre'],
+        ['Gypsum (Sulfur)', '20 kg/acre']
+      ],
+      Tomato: [
+        ['Urea (Nitrogen)', '70 kg/acre'],
+        ['TSP (Phosphorus)', '60 kg/acre'],
+        ['MOP (Potassium)', '50 kg/acre'],
+        ['Compost/Organic', '2 tons/acre'],
+        ['Boron (micronutrient)', '2 kg/acre']
+      ],
+      Maize: [
+        ['Urea (Nitrogen)', '90 kg/acre'],
+        ['TSP (Phosphorus)', '60 kg/acre'],
+        ['MOP (Potassium)', '40 kg/acre'],
+        ['Zinc Sulfate', '5 kg/acre']
+      ],
+      Potato: [
+        ['Urea (Nitrogen)', '75 kg/acre'],
+        ['TSP (Phosphorus)', '55 kg/acre'],
+        ['MOP (Potassium)', '60 kg/acre'],
+        ['Compost/Organic', '2 tons/acre']
+      ],
+      Jute: [
+        ['Urea (Nitrogen)', '60 kg/acre'],
+        ['TSP (Phosphorus)', '40 kg/acre'],
+        ['MOP (Potassium)', '30 kg/acre'],
+        ['Gypsum (Sulfur)', '20 kg/acre']
+      ]
+    };
+
+    function showFertilizer() {
+      const crop = document.getElementById('cropSelect').value;
+
+      if (!crop) {
+        document.getElementById('fertResult').style.display = 'none';
+        return;
+      }
+
+      const data = fertData[crop];
+      const tableHtml = data.map(row =>
+        `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`
+      ).join('');
+
+      document.getElementById('fertTable').innerHTML = tableHtml;
+      document.getElementById('fertResult').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

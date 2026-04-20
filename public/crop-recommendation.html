@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Crop Recommendation</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="page-container">
+    <div class="recommendation-form">
+
+      <h2>Crop Recommendation</h2>
+
+      <!-- Form -->
+      <div class="form-group">
+        <label>Soil Type:</label>
+        <select id="soilType">
+          <option value="">-- Select Soil --</option>
+          <option value="clay">Clay</option>
+          <option value="loamy">Loamy</option>
+          <option value="sandy">Sandy</option>
+          <option value="clay-loamy">Clay / Loamy</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Season:</label>
+        <select id="season">
+          <option value="">-- Select Season --</option>
+          <option value="summer">Summer</option>
+          <option value="winter">Winter</option>
+          <option value="rainy">Rainy</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Temperature (°C):</label>
+        <input type="number" id="temperature" placeholder="e.g. 28" />
+      </div>
+
+      <div class="form-group">
+        <label>Rainfall (mm):</label>
+        <input type="number" id="rainfall" placeholder="e.g. 150" />
+      </div>
+
+      <div class="form-group">
+        <label>Location:</label>
+        <input type="text" id="location" placeholder="e.g. Rajshahi" />
+      </div>
+
+      <!-- Recommend Button -->
+      <div style="text-align: center; margin-top: 20px;">
+        <button class="btn btn-green" onclick="recommendCrop()">Recommend Crop</button>
+      </div>
+
+      <!-- Bottom Buttons -->
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="history.back()">Back</button>
+        <a href="index.html" class="btn btn-back">Return Home</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function recommendCrop() {
+      const soil = document.getElementById('soilType').value;
+      const season = document.getElementById('season').value;
+      const temp = document.getElementById('temperature').value;
+      const rainfall = document.getElementById('rainfall').value;
+      const location = document.getElementById('location').value;
+
+      
+      if (!soil || !season || !temp || !rainfall || !location) {
+        alert('Please fill in all fields!');
+        return;
+      }
+
+      
+      let crop = '';
+
+      if (season === 'rainy' && (soil === 'clay' || soil === 'loamy' || soil === 'clay-loamy')) {
+        crop = 'Rice';
+      } else if (season === 'winter' && (soil === 'loamy' || soil === 'sandy')) {
+        crop = 'Wheat';
+      } else if (season === 'summer' && soil === 'sandy') {
+        crop = 'Tomato';
+      } else if (season === 'summer' && soil === 'loamy') {
+        crop = 'Maize';
+      } else if (season === 'winter' && soil === 'clay') {
+        crop = 'Potato';
+      } else {
+        crop = 'Rice'; // default
+      }
+
+    
+      window.location.href = 'crop-result.html?crop=' + crop;
+    }
+  </script>
+
+</body>
+</html>

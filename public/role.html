@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Select Role</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Role Selection -->
+  <div class="page-container">
+    <div class="role-page">
+
+      <h2>Welcome to AgroSmart!</h2>
+      <p>Please select your role to continue</p>
+
+      <!-- Admin icon top right -->
+      <div style="text-align: right; margin-bottom: 10px;">
+        <a href="login-admin.html" style="font-size: 0.85rem; color: #666;">⚙️ Admin</a>
+      </div>
+
+      <!-- Role Cards -->
+      <div class="role-grid">
+
+        <div class="role-card" onclick="goToLogin('farmer')">
+          <div class="role-icon">👨‍🌾</div>
+          <h3>Farmer</h3>
+          <button class="btn btn-green btn-small">Continue as Farmer</button>
+        </div>
+
+        <div class="role-card" onclick="goToLogin('student')">
+          <div class="role-icon">🎓</div>
+          <h3>Student</h3>
+          <button class="btn btn-green btn-small">Continue as Student</button>
+        </div>
+
+        <div class="role-card" onclick="goToLogin('worker')">
+          <div class="role-icon">👷</div>
+          <h3>Agriculture Worker</h3>
+          <button class="btn btn-green btn-small">Continue as Worker</button>
+        </div>
+
+      </div>
+
+      <!-- Bottom Buttons -->
+      <div class="btn-row" style="justify-content: center; margin-top: 20px;">
+        <a href="index.html" class="btn btn-back">Return Home</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Role select করলে login page এ role পাঠাবে
+    function goToLogin(role) {
+      window.location.href = 'login-page.html?role=' + role;
+    }
+  </script>
+
+</body>
+</html>

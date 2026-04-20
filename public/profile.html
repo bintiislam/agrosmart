@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Profile</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Profile Header -->
+  <div style="background-color: #4a7c3f; padding: 12px 30px;">
+    <h3 style="color: white; font-size: 1rem;">Profile</h3>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="page-container">
+    <div class="profile-card">
+
+      <!-- Avatar -->
+      <div class="profile-avatar">👤</div>
+
+      <!-- Info -->
+      <div class="profile-info">
+        <p><span>Name:</span> <span id="pName"></span></p>
+        <p><span>User ID:</span> <span id="pUserId"></span></p>
+        <p><span>Mobile NO:</span> <span id="pMobile"></span></p>
+        <p><span>Email:</span> <span id="pEmail"></span></p>
+        <p><span>Date of Birth:</span> 12/08/1995</p>
+        <p><span>Location:</span> <span id="pLocation"></span></p>
+      </div>
+
+    </div>
+
+    <!-- Bottom Buttons -->
+    <div class="btn-row">
+      <button class="btn btn-back" onclick="goBack()">Back</button>
+      <a href="index.html" class="btn btn-back">Return Home</a>
+    </div>
+  </div>
+
+  <script>
+    // Login করা user এর data দেখাও
+    const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+
+    if (!user.name) {
+      window.location.href = 'login-page.html';
+    }
+
+    document.getElementById('pName').textContent = user.name || 'N/A';
+    document.getElementById('pUserId').textContent = user.userId || 'N/A';
+    document.getElementById('pMobile').textContent = user.mobile || 'N/A';
+    document.getElementById('pEmail').textContent = user.email || 'N/A';
+    document.getElementById('pLocation').textContent = user.location || 'N/A';
+
+    // Back button — role অনুযায়ী dashboard এ ফিরে যাও
+    function goBack() {
+      const role = user.role;
+      if (role === 'farmer') {
+        window.location.href = 'farmer-dashboard.html';
+      } else if (role === 'student') {
+        window.location.href = 'student-dashboard.html';
+      } else if (role === 'worker') {
+        window.location.href = 'agri-dashboard.html';
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+
+</body>
+</html>

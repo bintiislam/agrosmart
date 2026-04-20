@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Crop Database</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="page-container-wide">
+
+    <!-- Crop Header (color change হবে crop অনুযায়ী) -->
+    <div class="crop-detail-header" id="cropHeader">
+      <div style="font-size: 3rem;" id="cropEmoji">🌾</div>
+      <div>
+        <div class="crop-tags" id="cropTags"></div>
+        <h1 id="cropTitle">Rice</h1>
+      </div>
+    </div>
+
+    <!-- Crop Detail Grid -->
+    <div class="crop-detail-grid">
+
+      <!-- Full Description -->
+      <div class="detail-section">
+        <h3>📋 Full Description</h3>
+        <p id="cropDesc"></p>
+      </div>
+
+      <!-- Growing Conditions -->
+      <div class="detail-section">
+        <h3>🌱 Growing Conditions</h3>
+        <ul id="cropConditions"></ul>
+      </div>
+
+      <!-- Common Diseases -->
+      <div class="detail-section">
+        <h3>🦠 Common Diseases & Pests</h3>
+        <ul id="cropDiseases"></ul>
+      </div>
+
+      <!-- Fertilizer Requirements -->
+      <div class="detail-section">
+        <h3>🧪 Fertilizer Requirements</h3>
+        <table class="fertilizer-table" id="cropFertilizer"></table>
+        <div class="harvest-info" id="cropHarvest"></div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Buttons -->
+    <div class="btn-row">
+      <button class="btn btn-back" onclick="history.back()">Back</button>
+      <a href="index.html" class="btn btn-back">Return Home</a>
+    </div>
+
+  </div>
+
+  <script>
+    // সব crop এর data
+    const cropData = {
+      Rice: {
+        emoji: '🌾',
+        color: 'rice',
+        tags: ['🌧️ Rainy Season', '💧 Rainfall: High (150cm+)', '🌱 Soil: Clay / Loamy', '🌡️ Temperature: 20°C - 35°C'],
+        desc: 'Rice (Oryza sativa) is the most important staple food crop in Bangladesh and across South and Southeast Asia. It thrives in waterlogged or irrigated conditions and requires warm temperatures throughout its growing period. Rice is cultivated in three main seasons: Aus, Aman, and Boro, with Aman being the most widely grown variety during the rainy season.',
+        conditions: [
+          'Temperature: 20°C - 35°C',
+          'Rainfall: High (150cm+)',
+          'Soil: Clay / Loamy, well drained',
+          'Full sunlight required',
+          'pH level: 5.5 - 7'
+        ],
+        diseases: [
+          'Brown Planthopper',
+          'Leaf Blight',
+          'Blast Disease',
+          'Sheath Rot',
+          'Golden Apple Snail'
+        ],
+        fertilizer: [
+          ['Urea (Nitrogen)', '80 kg/acre'],
+          ['TSP (Phosphorus)', '55 kg/acre'],
+          ['MOP (Potassium)', '40 kg/acre'],
+          ['Gypsum (Sulfur)', '30 kg/acre']
+        ],
+        harvest: '⏱ Harvest Time: 120 - 150 Days'
+      },
+
+      Wheat: {
+        emoji: '🌿',
+        color: 'wheat',
+        tags: ['❄️ Winter Season', '💧 Rainfall: Low to Medium (50-75cm)', '🌱 Soil: Loamy', '🌡️ Temperature: 10°C - 25°C'],
+        desc: 'Wheat (Triticum aestivum) is one of the most important cereal crops in Bangladesh, primarily grown during the winter (Rabi) season. It is the second most consumed grain after rice. Wheat grows best in cool, dry climates with well-drained sandy or loamy soils. It is widely cultivated in northern Bangladesh, especially in Rajshahi, Dinajpur, and Rangpur districts.',
+        conditions: [
+          'Temperature: 10°C - 25°C',
+          'Rainfall: Low to Medium (50-75cm)',
+          'Full sunlight required',
+          'Soil: Sandy / Loamy, well-drained',
+          'pH level: 6.0 - 7.5'
+        ],
+        diseases: [
+          'Rust Disease (Yellow/Brown/Black)',
+          'Powdery Mildew',
+          'Aphids',
+          'Armyworm',
+          'Loose Smut'
+        ],
+        fertilizer: [
+          ['Urea (Nitrogen)', '65 kg/acre'],
+          ['TSP (Phosphorus)', '50 kg/acre'],
+          ['MOP (Potassium)', '30 kg/acre'],
+          ['Gypsum (Sulfur)', '20 kg/acre']
+        ],
+        harvest: '⏱ Harvest Time: 110 - 130 Days'
+      },
+
+      Tomato: {
+        emoji: '🍅',
+        color: 'tomato',
+        tags: ['☀️ Summer / Winter', '💧 Rainfall: Medium (75-100cm)', '🌱 Soil: Sandy / Loamy', '🌡️ Temperature: 18°C - 30°C'],
+        desc: 'Tomato (Solanum lycopersicum) is one of the most popular and widely cultivated vegetable crops in Bangladesh. It can be grown in both winter and early summer seasons. Tomatoes require well-drained, fertile loamy soil and moderate water supply. They are rich in vitamins and antioxidants, making them an important crop for both domestic consumption and commercial farming.',
+        conditions: [
+          'Temperature: 18°C - 30°C',
+          'Rainfall: Medium (75-100cm)',
+          'Full sunlight, minimum 6 hours/day',
+          'Soil: Loamy / Sandy Loam, well-drained',
+          'pH level: 6.0 - 6.8',
+          'Stakes/support required for vines'
+        ],
+        diseases: [
+          'Early Blight',
+          'Late Blight',
+          'Fruit Borer',
+          'Bacterial Wilt',
+          'Mosaic Virus'
+        ],
+        fertilizer: [
+          ['Urea (Nitrogen)', '70 kg/acre'],
+          ['TSP (Phosphorus)', '60 kg/acre'],
+          ['MOP (Potassium)', '50 kg/acre'],
+          ['Compost/Organic', '2 tons/acre'],
+          ['Boron (micronutrient)', '2 kg/acre']
+        ],
+        harvest: '⏱ Harvest Time: 60 - 90 Days'
+      },
+
+      Maize: {
+        emoji: '🌽',
+        color: 'rice',
+        tags: ['☀️ Summer Season', '💧 Rainfall: Medium', '🌱 Soil: Loamy', '🌡️ Temperature: 20°C - 30°C'],
+        desc: 'Maize (Zea mays) is an important cereal crop widely grown in Bangladesh. It is used for food, animal feed, and industrial purposes. Maize grows well in warm weather with moderate rainfall and well-drained loamy soil.',
+        conditions: [
+          'Temperature: 20°C - 30°C',
+          'Rainfall: Medium',
+          'Soil: Loamy, well-drained',
+          'Full sunlight required',
+          'pH level: 5.8 - 7.0'
+        ],
+        diseases: [
+          'Corn Borer',
+          'Leaf Blight',
+          'Downy Mildew',
+          'Stalk Rot',
+          'Aphids'
+        ],
+        fertilizer: [
+          ['Urea (Nitrogen)', '90 kg/acre'],
+          ['TSP (Phosphorus)', '60 kg/acre'],
+          ['MOP (Potassium)', '40 kg/acre'],
+          ['Zinc Sulfate', '5 kg/acre']
+        ],
+        harvest: '⏱ Harvest Time: 90 - 110 Days'
+      },
+
+      Potato: {
+        emoji: '🥔',
+        color: 'wheat',
+        tags: ['❄️ Winter Season', '💧 Rainfall: Low to Medium', '🌱 Soil: Loamy', '🌡️ Temperature: 10°C - 20°C'],
+        desc: 'Potato (Solanum tuberosum) is one of the most important vegetable crops in Bangladesh, cultivated mainly during the winter season. It is a staple food and cash crop for many farmers in northern and central Bangladesh.',
+        conditions: [
+          'Temperature: 10°C - 20°C',
+          'Cool weather required',
+          'Soil: Loamy, well-drained',
+          'Moderate sunlight',
+          'pH level: 5.0 - 6.5'
+        ],
+        diseases: [
+          'Late Blight',
+          'Early Blight',
+          'Bacterial Wilt',
+          'Potato Virus Y',
+          'Colorado Beetle'
+        ],
+        fertilizer: [
+          ['Urea (Nitrogen)', '75 kg/acre'],
+          ['TSP (Phosphorus)', '55 kg/acre'],
+          ['MOP (Potassium)', '60 kg/acre'],
+          ['Compost/Organic', '2 tons/acre']
+        ],
+        harvest: '⏱ Harvest Time: 70 - 90 Days'
+      },
+
+      Jute: {
+        emoji: '🌱',
+        color: 'rice',
+        tags: ['🌧️ Rainy Season', '💧 Rainfall: High', '🌱 Soil: Clay', '🌡️ Temperature: 25°C - 35°C'],
+        desc: 'Jute (Corchorus olitorius) is the golden fiber of Bangladesh and one of the most important cash crops. It thrives in warm, humid climates with high rainfall. Bangladesh is one of the world\'s leading producers of jute.',
+        conditions: [
+          'Temperature: 25°C - 35°C',
+          'High rainfall required',
+          'Soil: Clay / Alluvial',
+          'Full sunlight required',
+          'pH level: 6.0 - 7.5'
+        ],
+        diseases: [
+          'Stem Rot',
+          'Leaf Spot',
+          'Root Knot Nematode',
+          'Hairy Caterpillar',
+          'Yellow Mite'
+        ],
+        fertilizer: [
+          ['Urea (Nitrogen)', '60 kg/acre'],
+          ['TSP (Phosphorus)', '40 kg/acre'],
+          ['MOP (Potassium)', '30 kg/acre'],
+          ['Gypsum (Sulfur)', '20 kg/acre']
+        ],
+        harvest: '⏱ Harvest Time: 100 - 120 Days'
+      }
+    };
+
+    // URL থেকে crop নাম বের করো
+    const params = new URLSearchParams(window.location.search);
+    const cropName = params.get('crop') || 'Rice';
+    const data = cropData[cropName] || cropData['Rice'];
+
+    // Page এ data বসাও
+    document.getElementById('cropEmoji').textContent = data.emoji;
+    document.getElementById('cropTitle').textContent = cropName;
+    document.getElementById('cropHeader').className = 'crop-detail-header ' + data.color;
+    document.getElementById('cropDesc').textContent = data.desc;
+
+    // Tags
+    const tagsHtml = data.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    document.getElementById('cropTags').innerHTML = tagsHtml;
+
+    // Conditions
+    const condHtml = data.conditions.map(c => `<li>${c}</li>`).join('');
+    document.getElementById('cropConditions').innerHTML = condHtml;
+
+    // Diseases
+    const diseaseHtml = data.diseases.map(d => `<li>🔴 ${d}</li>`).join('');
+    document.getElementById('cropDiseases').innerHTML = diseaseHtml;
+
+    // Fertilizer table
+    const fertHtml = data.fertilizer.map(f =>
+      `<tr><td>${f[0]}</td><td style="font-weight:600; color:#4a7c3f;">${f[1]}</td></tr>`
+    ).join('');
+    document.getElementById('cropFertilizer').innerHTML = fertHtml;
+
+    // Harvest
+    document.getElementById('cropHarvest').textContent = data.harvest;
+  </script>
+
+</body>
+</html>

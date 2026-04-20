@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Farmer Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+    <nav>
+      <span id="welcomeName" style="color: #2d5a27; font-weight:600;"></span>
+      &nbsp;&nbsp;
+      <a href="index.html" onclick="logout()">Logout</a>
+    </nav>
+  </div>
+
+  <!-- Dashboard Layout -->
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <a href="profile.html" class="active">Profile</a>
+      <a href="crop-info.html">Crop Information</a>
+      <a href="crop-recommendation.html">Crop Recommendation</a>
+      <a href="fertilizer-guide.html">Fertilizer Guide</a>
+      <a href="seasonal-guide.html">Seasonal Guide</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-content">
+
+      <!-- Welcome Box -->
+      <div class="dashboard-header">
+        <h2 id="dashWelcome">Welcome back! 🌾</h2>
+        <p>Today's weather: 28°C &nbsp;|&nbsp; Rajshahi</p>
+        <p>Humidity, Rainfall chance</p>
+        <p>Good day for farming! ✅</p>
+      </div>
+
+      <!-- Latest Tips -->
+      <div class="tips-box">
+        <h3>🌱 Latest Tips</h3>
+        <ul>
+          <li>💧 Water early in the morning</li>
+          <li>🌿 Use organic fertilizer</li>
+        </ul>
+      </div>
+
+      <!-- Disease Alert -->
+      <div class="alert-box">
+        <h3>⚠️ Disease Alert Section</h3>
+        <ul>
+          <li>🟡 Brown Planthopper detected in Rajshahi</li>
+          <li>🟡 Leaf Blight reported in Dhaka district</li>
+        </ul>
+      </div>
+
+      <!-- Bottom Buttons -->
+      <div class="btn-row">
+        <a href="index.html" class="btn btn-back">Return Home</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Login করা user এর নাম দেখাও
+    const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+
+    if (!user.name) {
+      // Login না করলে login page এ পাঠাও
+      window.location.href = 'login-page.html?role=farmer';
+    }
+
+    document.getElementById('welcomeName').textContent = user.name || '';
+    document.getElementById('dashWelcome').textContent = 'Welcome back, ' + (user.name || '') + '! 🌾';
+
+    function logout() {
+      localStorage.removeItem('loggedInUser');
+    }
+  </script>
+
+</body>
+</html>

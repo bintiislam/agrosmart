@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Crop Result</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Result Content -->
+  <div class="page-container">
+    <div class="result-box">
+
+      <h2>Recommended Crop:</h2>
+      <div class="crop-name" id="cropName"></div>
+      <br>
+      <p>Suitable for your soil type and rainfall conditions.</p>
+
+      <!-- View Details Button -->
+      <button class="btn btn-green" onclick="viewDetails()">View Details</button>
+
+      <!-- Bottom Buttons -->
+      <div class="btn-row" style="justify-content: center; margin-top: 20px;">
+        <button class="btn btn-back" onclick="history.back()">Back</button>
+        <a href="index.html" class="btn btn-back">Return Home</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // URL থেকে crop নাম বের করো
+    const params = new URLSearchParams(window.location.search);
+    const crop = params.get('crop') || 'Rice';
+
+    document.getElementById('cropName').textContent = crop;
+
+    // View Details চাপলে crop database page এ যাবে
+    function viewDetails() {
+      window.location.href = 'crop-database.html?crop=' + crop;
+    }
+  </script>
+
+</body>
+</html>

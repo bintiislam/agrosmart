@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+    <nav>
+      <span style="color:#2d5a27; font-weight:600;">Admin</span>
+      &nbsp;&nbsp;
+      <a href="index.html" onclick="adminLogout()">Logout</a>
+    </nav>
+  </div>
+
+  <!-- Dashboard Layout -->
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <a href="admin-dashboard.html" class="active">Profile</a>
+      <a href="admin-dashboard.html">Manage Crops</a>
+      <a href="admin-dashboard.html">Manage Users</a>
+      <a href="admin-manage.html">Manage Content</a>
+      <a href="seasonal-guide.html">Seasonal Data</a>
+      <a href="crop-info.html">Crop Information</a>
+      <a href="fertilizer-guide.html">Fertilizer Information</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-content">
+
+      <!-- Manage Crops Section -->
+      <div style="margin-bottom: 30px;">
+        <div class="admin-section-title">
+          <h3>🌾 Manage Crops</h3>
+          <button class="btn btn-green btn-small" onclick="addCrop()">+ Add Crop</button>
+        </div>
+
+        <table class="admin-table" id="cropsTable">
+          <thead>
+            <tr>
+              <th>Crop</th>
+              <th>Season</th>
+              <th>Soil Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="cropsBody">
+            <tr>
+              <td>Rice</td>
+              <td>Rainy</td>
+              <td>Clay / Loamy</td>
+              <td>
+                <button class="btn btn-green btn-small" onclick="viewCrop('Rice')">Edit</button>
+                <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Wheat</td>
+              <td>Winter</td>
+              <td>Loamy</td>
+              <td>
+                <button class="btn btn-green btn-small" onclick="viewCrop('Wheat')">Edit</button>
+                <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Maize</td>
+              <td>Summer</td>
+              <td>Loamy</td>
+              <td>
+                <button class="btn btn-green btn-small" onclick="viewCrop('Maize')">Edit</button>
+                <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Potato</td>
+              <td>Winter</td>
+              <td>Loamy</td>
+              <td>
+                <button class="btn btn-green btn-small" onclick="viewCrop('Potato')">Edit</button>
+                <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Manage Users Section -->
+      <div style="margin-bottom: 30px;">
+        <div class="admin-section-title">
+          <h3>👥 Manage Users</h3>
+          <button class="btn btn-green btn-small">Edit</button>
+        </div>
+
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody">
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bottom Buttons -->
+      <div class="btn-row">
+        <a href="index.html" class="btn btn-back">Return Home</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Admin login check
+    if (localStorage.getItem('adminLogged') !== 'true') {
+      window.location.href = 'login-admin.html';
+    }
+
+    // Registered users 
+    function loadUsers() {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const tbody = document.getElementById('usersBody');
+
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#999;">No users registered yet</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = users.map(u =>
+        `<tr>
+          <td>${u.name}</td>
+          <td style="text-transform:capitalize;">${u.role}</td>
+          <td class="status-active">Active</td>
+        </tr>`
+      ).join('');
+    }
+
+    loadUsers();
+
+    // Crop delete
+    function deleteCrop(btn) {
+      if (confirm('Are you sure you want to delete this crop?')) {
+        btn.closest('tr').remove();
+      }
+    }
+
+    // Crop view/edit
+    function viewCrop(crop) {
+      window.location.href = 'crop-database.html?crop=' + crop;
+    }
+
+    // Add crop
+    function addCrop() {
+      const name = prompt('Enter crop name:');
+      if (name) {
+        const tbody = document.getElementById('cropsBody');
+        const newRow = `<tr>
+          <td>${name}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>
+            <button class="btn btn-green btn-small">Edit</button>
+            <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
+          </td>
+        </tr>`;
+        tbody.innerHTML += newRow;
+      }
+    }
+
+    function adminLogout() {
+      localStorage.removeItem('adminLogged');
+    }
+  </script>
+
+</body>
+</html>

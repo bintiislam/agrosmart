@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Login</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Login Box -->
+  <div class="page-container">
+    <div class="login-page">
+
+      <div class="login-box">
+        <h2>Login to AgroSmart</h2>
+
+        <!-- Login Form -->
+        <div id="loginForm">
+          <div class="form-group">
+            <input type="text" id="loginEmail" placeholder="Email" />
+          </div>
+          <div class="form-group">
+            <input type="password" id="loginPassword" placeholder="Password" />
+          </div>
+          <button class="btn btn-green" onclick="doLogin()">Login</button>
+          <br><br>
+          <button class="btn btn-outline" onclick="showSignup()">Sign Up</button>
+          <br><br>
+          <span class="forgot" onclick="alert('Contact admin to reset password.')">Forgot Password?</span>
+        </div>
+
+        <!-- Signup Form (শুরুতে লুকানো থাকবে) -->
+        <div id="signupForm" style="display:none;">
+          <div class="form-group">
+            <input type="text" id="signupName" placeholder="Full Name" />
+          </div>
+          <div class="form-group">
+            <input type="text" id="signupEmail" placeholder="Email" />
+          </div>
+          <div class="form-group">
+            <input type="password" id="signupPassword" placeholder="Password" />
+          </div>
+          <div class="form-group">
+            <input type="text" id="signupMobile" placeholder="Mobile Number" />
+          </div>
+          <div class="form-group">
+            <input type="text" id="signupLocation" placeholder="Location" />
+          </div>
+          <button class="btn btn-green" onclick="doSignup()">Create Account</button>
+          <br><br>
+          <button class="btn btn-outline" onclick="showLogin()">Back to Login</button>
+        </div>
+
+        <div class="login-img">🧑‍🌾</div>
+
+        <!-- Bottom Buttons -->
+        <div class="btn-row" style="justify-content:center; margin-top:15px;">
+          <a href="role.html" class="btn btn-back btn-small">Back</a>
+          <a href="index.html" class="btn btn-back btn-small">Return Home</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // URL থেকে role বের করো
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role') || 'farmer';
+
+    // Login এর কাজ
+    function doLogin() {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      if (email === '' || password === '') {
+        alert('Please fill in all fields!');
+        return;
+      }
+
+      // LocalStorage থেকে user খোঁজো
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        // Login সফল হলে user info save করো
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+        // Role অনুযায়ী dashboard এ পাঠাও
+        if (user.role === 'farmer') {
+          window.location.href = 'farmer-dashboard.html';
+        } else if (user.role === 'student') {
+          window.location.href = 'student-dashboard.html';
+        } else if (user.role === 'worker') {
+          window.location.href = 'agri-dashboard.html';
+        }
+      } else {
+        alert('Email or password is wrong! Please sign up first.');
+      }
+    }
+
+    // Signup এর কাজ
+    function doSignup() {
+      const name = document.getElementById('signupName').value;
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+      const mobile = document.getElementById('signupMobile').value;
+      const location = document.getElementById('signupLocation').value;
+
+      if (name === '' || email === '' || password === '') {
+        alert('Please fill name, email and password!');
+        return;
+      }
+
+      // নতুন user বানাও
+      const newUser = {
+        name: name,
+        email: email,
+        password: password,
+        mobile: mobile,
+        location: location,
+        role: role,
+        userId: 'USR' + Date.now()
+      };
+
+      // LocalStorage এ save করো
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+
+      alert('Account created successfully! Please login now.');
+      showLogin();
+    }
+
+    // Signup form দেখাও
+    function showSignup() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('signupForm').style.display = 'block';
+    }
+
+    // Login form দেখাও
+    function showLogin() {
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('loginForm').style.display = 'block';
+    }
+  </script>
+<script type="module" src="firebase-config.js"></script>
+</body>
+</html>

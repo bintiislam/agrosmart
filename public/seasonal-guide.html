@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Seasonal Guide</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="page-container">
+
+    <h2 class="page-title" style="color: #4a7c3f;">🌤️ Seasonal Crop Guide</h2>
+
+    <!-- Season Tabs -->
+    <div class="season-tabs">
+      <button class="season-tab active" onclick="showSeason('summer', this)">Summer</button>
+      <button class="season-tab" onclick="showSeason('winter', this)">Winter</button>
+      <button class="season-tab" onclick="showSeason('rainy', this)">Rainy</button>
+    </div>
+
+    <!-- Season Table -->
+    <div class="season-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Crop</th>
+            <th>Planting Time</th>
+            <th>Harvest Time</th>
+            <th>Soil Type</th>
+          </tr>
+        </thead>
+        <tbody id="seasonTableBody">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Bottom Buttons -->
+    <div class="btn-row">
+      <button class="btn btn-back" onclick="history.back()">Back</button>
+      <a href="index.html" class="btn btn-back">Return Home</a>
+    </div>
+
+  </div>
+
+  <script>
+    // প্রতিটা season এর crop data
+    const seasonData = {
+      summer: [
+        ['🌽 Maize', 'March - April', 'June - July', 'Loamy'],
+        ['🍅 Tomato', 'February - March', 'May - June', 'Sandy / Loamy'],
+        ['🥦 Vegetables', 'March - April', 'May - June', 'Loamy'],
+        ['🌶️ Chili', 'February - March', 'May - June', 'Sandy Loam']
+      ],
+      winter: [
+        ['🌿 Wheat', 'November - December', 'March - April', 'Loamy'],
+        ['🥔 Potato', 'October - November', 'January - February', 'Loamy'],
+        ['🧅 Onion', 'October - November', 'February - March', 'Sandy Loam'],
+        ['🥕 Carrot', 'October - November', 'January - February', 'Sandy Loam']
+      ],
+      rainy: [
+        ['🌾 Rice', 'June - July', 'October - November', 'Clay / Loamy'],
+        ['🌱 Jute', 'April - May', 'July - August', 'Clay'],
+        ['🌽 Aus Rice', 'April - May', 'July - August', 'Loamy'],
+        ['🎋 Sugarcane', 'February - March', 'December - January', 'Loamy']
+      ]
+    };
+
+    // Season অনুযায়ী table দেখাও
+    function showSeason(season, btn) {
+      // Active tab change করো
+      document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Table data বসাও
+      const data = seasonData[season];
+      const rowsHtml = data.map(row =>
+        `<tr>
+          <td>${row[0]}</td>
+          <td>${row[1]}</td>
+          <td>${row[2]}</td>
+          <td>${row[3]}</td>
+        </tr>`
+      ).join('');
+
+      document.getElementById('seasonTableBody').innerHTML = rowsHtml;
+    }
+
+    // Page load এ Summer দেখাও
+    showSeason('summer', document.querySelector('.season-tab'));
+  </script>
+
+</body>
+</html>

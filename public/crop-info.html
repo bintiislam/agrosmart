@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroSmart - Crop Information</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">🌿 <span>AgroSmart</span></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="page-container">
+
+    <h2 class="page-title">Crop Information Data</h2>
+
+    <!-- Search Bar -->
+    <input
+      type="text"
+      class="search-bar"
+      id="searchInput"
+      placeholder="Search crop name..."
+      onkeyup="searchCrop()"
+    />
+
+    <!-- Crop Cards -->
+    <div class="crop-grid" id="cropGrid">
+
+      <div class="crop-card" id="card-rice">
+        <h3>🌾 Rice</h3>
+        <p>Season: Rainy<br>Soil: Clay / Loamy</p>
+        <button class="btn btn-green btn-small" onclick="viewCrop('Rice')">View Details</button>
+      </div>
+
+      <div class="crop-card" id="card-wheat">
+        <h3>🌿 Wheat</h3>
+        <p>Season: Winter<br>Soil: Loamy</p>
+        <button class="btn btn-green btn-small" onclick="viewCrop('Wheat')">View Details</button>
+      </div>
+
+      <div class="crop-card" id="card-tomato">
+        <h3>🍅 Tomato</h3>
+        <p>Season: Summer<br>Soil: Sandy</p>
+        <button class="btn btn-green btn-small" onclick="viewCrop('Tomato')">View Details</button>
+      </div>
+
+      <div class="crop-card" id="card-maize">
+        <h3>🌽 Maize</h3>
+        <p>Season: Summer<br>Soil: Loamy</p>
+        <button class="btn btn-green btn-small" onclick="viewCrop('Maize')">View Details</button>
+      </div>
+
+      <div class="crop-card" id="card-potato">
+        <h3>🥔 Potato</h3>
+        <p>Season: Winter<br>Soil: Loamy</p>
+        <button class="btn btn-green btn-small" onclick="viewCrop('Potato')">View Details</button>
+      </div>
+
+      <div class="crop-card" id="card-jute">
+        <h3>🌱 Jute</h3>
+        <p>Season: Rainy<br>Soil: Clay</p>
+        <button class="btn btn-green btn-small" onclick="viewCrop('Jute')">View Details</button>
+      </div>
+
+    </div>
+
+    <!-- Bottom Buttons -->
+    <div class="btn-row">
+      <button class="btn btn-back" onclick="history.back()">Back</button>
+      <a href="index.html" class="btn btn-back">Return Home</a>
+    </div>
+
+  </div>
+
+  <script>
+    // View Details button চাপলে crop database page এ যাবে
+    function viewCrop(cropName) {
+      window.location.href = 'crop-database.html?crop=' + cropName;
+    }
+
+    // Search কাজ করবে
+    function searchCrop() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.crop-card');
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(input)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
