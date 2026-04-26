@@ -7,7 +7,7 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
     <nav>
@@ -17,10 +17,10 @@
     </nav>
   </div>
 
-  <!-- Dashboard Layout -->
+  
   <div class="dashboard-layout">
 
-    <!-- Sidebar -->
+    
     <div class="sidebar">
       <a href="profile.html" class="active">Profile</a>
       <a href="crop-info.html">Crop Information</a>
@@ -29,10 +29,10 @@
       <a href="seasonal-guide.html">Seasonal Guide</a>
     </div>
 
-    <!-- Main Content -->
+    
     <div class="dashboard-content">
 
-      <!-- Welcome Box -->
+      
       <div class="dashboard-header">
         <h2 id="dashWelcome">Welcome back! 🌾</h2>
         <p>Today's weather: 28°C &nbsp;|&nbsp; Rajshahi</p>
@@ -40,7 +40,7 @@
         <p>Good day for farming! ✅</p>
       </div>
 
-      <!-- Latest Tips -->
+      
       <div class="tips-box">
         <h3>🌱 Latest Tips</h3>
         <ul>
@@ -49,7 +49,7 @@
         </ul>
       </div>
 
-      <!-- Disease Alert -->
+      
       <div class="alert-box">
         <h3>⚠️ Disease Alert Section</h3>
         <ul>
@@ -58,7 +58,7 @@
         </ul>
       </div>
 
-      <!-- Bottom Buttons -->
+      
       <div class="btn-row">
         <a href="index.html" class="btn btn-back">Return Home</a>
       </div>
@@ -67,11 +67,11 @@
   </div>
 
   <script>
-    // Login করা user এর নাম দেখাও
+  
     const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
     if (!user.name) {
-      // Login না করলে login page এ পাঠাও
+
       window.location.href = 'login-page.html?role=farmer';
     }
 

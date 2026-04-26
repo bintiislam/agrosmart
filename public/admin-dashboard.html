@@ -7,7 +7,7 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
     <nav>
@@ -17,7 +17,7 @@
     </nav>
   </div>
 
-  <!-- Dashboard Layout -->
+  
   <div class="dashboard-layout">
 
     <!-- Sidebar -->
@@ -31,10 +31,10 @@
       <a href="fertilizer-guide.html">Fertilizer Information</a>
     </div>
 
-    <!-- Main Content -->
+    
     <div class="dashboard-content">
 
-      <!-- Manage Crops Section -->
+      
       <div style="margin-bottom: 30px;">
         <div class="admin-section-title">
           <h3>🌾 Manage Crops</h3>
@@ -91,7 +91,7 @@
         </table>
       </div>
 
-      <!-- Manage Users Section -->
+      
       <div style="margin-bottom: 30px;">
         <div class="admin-section-title">
           <h3>👥 Manage Users</h3>
@@ -111,7 +111,7 @@
         </table>
       </div>
 
-      <!-- Bottom Buttons -->
+      
       <div class="btn-row">
         <a href="index.html" class="btn btn-back">Return Home</a>
       </div>
@@ -120,12 +120,10 @@
   </div>
 
   <script>
-    // Admin login check
     if (localStorage.getItem('adminLogged') !== 'true') {
       window.location.href = 'login-admin.html';
     }
 
-    // Registered users 
     function loadUsers() {
       const users = JSON.parse(localStorage.getItem('users') || '[]');
       const tbody = document.getElementById('usersBody');
@@ -146,19 +144,16 @@
 
     loadUsers();
 
-    // Crop delete
     function deleteCrop(btn) {
       if (confirm('Are you sure you want to delete this crop?')) {
         btn.closest('tr').remove();
       }
     }
 
-    // Crop view/edit
     function viewCrop(crop) {
       window.location.href = 'crop-database.html?crop=' + crop;
     }
 
-    // Add crop
     function addCrop() {
       const name = prompt('Enter crop name:');
       if (name) {

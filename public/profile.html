@@ -44,7 +44,7 @@
   </div>
 
   <script>
-    // Login করা user এর data দেখাও
+    
     const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
     if (!user.name) {
@@ -57,7 +57,7 @@
     document.getElementById('pEmail').textContent = user.email || 'N/A';
     document.getElementById('pLocation').textContent = user.location || 'N/A';
 
-    // Back button — role অনুযায়ী dashboard এ ফিরে যাও
+    
     function goBack() {
       const role = user.role;
       if (role === 'farmer') {

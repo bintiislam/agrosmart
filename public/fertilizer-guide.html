@@ -7,18 +7,18 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
   </div>
 
-  <!-- Main Content -->
+  
   <div class="page-container">
     <div class="fertilizer-box">
 
       <h2>🧪 Fertilizer Guide</h2>
 
-      <!-- Crop Select -->
+      
       <div class="form-group">
         <label>Select Crop:</label>
         <select id="cropSelect" onchange="showFertilizer()">
@@ -32,14 +32,14 @@
         </select>
       </div>
 
-      <!-- Fertilizer Result (শুরুতে লুকানো) -->
+      
       <div class="fertilizer-result" id="fertResult" style="display:none;">
         <h3>Fertilizer Recommendation</h3>
         <table id="fertTable">
         </table>
       </div>
 
-      <!-- Bottom Buttons -->
+
       <div class="btn-row">
         <button class="btn btn-back" onclick="history.back()">Back</button>
         <a href="index.html" class="btn btn-back">Return Home</a>
@@ -49,7 +49,7 @@
   </div>
 
   <script>
-    // প্রতিটা crop এর fertilizer data
+   
     const fertData = {
       Rice: [
         ['Urea (Nitrogen)', '80 kg/acre'],

@@ -7,7 +7,7 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
     <nav>
@@ -17,10 +17,10 @@
     </nav>
   </div>
 
-  <!-- Dashboard Layout -->
+  
   <div class="dashboard-layout">
 
-    <!-- Sidebar -->
+    
     <div class="sidebar">
       <a href="admin-dashboard.html">Profile</a>
       <a href="admin-dashboard.html">Manage Crops</a>
@@ -31,12 +31,12 @@
       <a href="fertilizer-guide.html">Fertilizer Information</a>
     </div>
 
-    <!-- Main Content -->
+    
     <div class="dashboard-content">
 
       <h2 style="color:#2d5a27; margin-bottom:25px;">Admin Dashboard</h2>
 
-      <!-- Manage Users Table -->
+      
       <div style="margin-bottom: 30px;">
         <div class="admin-section-title">
           <h3>👥 Manage Users</h3>
@@ -55,7 +55,7 @@
         </table>
       </div>
 
-      <!-- Manage Content Table -->
+      
       <div style="margin-bottom: 30px;">
         <div class="admin-section-title">
           <h3>📋 Manage Content</h3>
@@ -90,7 +90,7 @@
         </table>
       </div>
 
-      <!-- Bottom Buttons -->
+      
       <div class="btn-row">
         <button class="btn btn-back" onclick="history.back()">Back</button>
         <a href="index.html" class="btn btn-back">Return Home</a>
@@ -100,12 +100,10 @@
   </div>
 
   <script>
-    // Admin login check
     if (localStorage.getItem('adminLogged') !== 'true') {
       window.location.href = 'login-admin.html';
     }
 
-    // Users দেখাও
     function loadUsers() {
       const users = JSON.parse(localStorage.getItem('users') || '[]');
       const tbody = document.getElementById('usersBody');

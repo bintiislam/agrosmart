@@ -7,19 +7,19 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
   </div>
 
-  <!-- Login Box -->
+  
   <div class="page-container">
     <div class="login-page">
 
       <div class="login-box">
         <h2>Login to AgroSmart</h2>
 
-        <!-- Login Form -->
+        
         <div id="loginForm">
           <div class="form-group">
             <input type="text" id="loginEmail" placeholder="Email" />
@@ -34,7 +34,7 @@
           <span class="forgot">Forgot Password?</span>
         </div>
 
-        <!-- Signup Form -->
+        
         <div id="signupForm" style="display:none;">
           <div class="form-group">
             <input type="text" id="signupName" placeholder="Full Name" />
@@ -56,7 +56,7 @@
           <button class="btn btn-outline" onclick="showLogin()">Back to Login</button>
         </div>
 
-        <!-- Loading text -->
+        
         <div id="loadingMsg" style="display:none; color:#4a7c3f; margin-top:10px;">
           Please wait...
         </div>
@@ -73,11 +73,11 @@
   </div>
 
   <script type="module">
-    // Firebase import
+    
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-    // Firebase config
+    
     const firebaseConfig = {
       apiKey: "AIzaSyB2C0Uf6NWWqUkp3kCAeAoFXq7k5GeVzgc",
       authDomain: "agrosmart-4e1fe.firebaseapp.com",
@@ -87,7 +87,7 @@
       appId: "1:448300580974:web:0ae670c92892f1ae77267f"
     };
 
-    // Firebase initialize
+    
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
@@ -95,7 +95,7 @@
     const params = new URLSearchParams(window.location.search);
     const role = params.get('role') || 'farmer';
 
-    // Login
+    
     window.doLogin = async function() {
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
@@ -140,7 +140,7 @@
       }
     }
 
-    // Signup
+    
     window.doSignup = async function() {
       const name = document.getElementById('signupName').value;
       const email = document.getElementById('signupEmail').value;
@@ -179,7 +179,7 @@
       }
     }
 
-    // Forms toggle
+    
     window.showSignup = function() {
       document.getElementById('loginForm').style.display = 'none';
       document.getElementById('signupForm').style.display = 'block';

@@ -7,17 +7,17 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
   </div>
 
-  <!-- Main Content -->
+  
   <div class="page-container">
 
     <h2 class="page-title">Crop Information Data</h2>
 
-    <!-- Search Bar -->
+    
     <input
       type="text"
       class="search-bar"
@@ -26,7 +26,7 @@
       onkeyup="searchCrop()"
     />
 
-    <!-- Crop Cards -->
+    
     <div class="crop-grid" id="cropGrid">
 
       <div class="crop-card" id="card-rice">
@@ -67,7 +67,7 @@
 
     </div>
 
-    <!-- Bottom Buttons -->
+  
     <div class="btn-row">
       <button class="btn btn-back" onclick="history.back()">Back</button>
       <a href="index.html" class="btn btn-back">Return Home</a>
@@ -76,12 +76,12 @@
   </div>
 
   <script>
-    // View Details button চাপলে crop database page এ যাবে
+
     function viewCrop(cropName) {
       window.location.href = 'crop-database.html?crop=' + cropName;
     }
 
-    // Search কাজ করবে
+
     function searchCrop() {
       const input = document.getElementById('searchInput').value.toLowerCase();
       const cards = document.querySelectorAll('.crop-card');

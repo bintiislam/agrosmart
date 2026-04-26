@@ -49,7 +49,7 @@
   </div>
 
   <script>
-    // প্রতিটা season এর crop data
+    
     const seasonData = {
       summer: [
         ['🌽 Maize', 'March - April', 'June - July', 'Loamy'],
@@ -71,13 +71,13 @@
       ]
     };
 
-    // Season অনুযায়ী table দেখাও
+    
     function showSeason(season, btn) {
-      // Active tab change করো
+      
       document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
 
-      // Table data বসাও
+      
       const data = seasonData[season];
       const rowsHtml = data.map(row =>
         `<tr>
@@ -91,7 +91,7 @@
       document.getElementById('seasonTableBody').innerHTML = rowsHtml;
     }
 
-    // Page load এ Summer দেখাও
+    
     showSeason('summer', document.querySelector('.season-tab'));
   </script>
 
