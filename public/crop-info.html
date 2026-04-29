@@ -9,7 +9,309 @@
 
   
   <div class="navbar">
-    <div class="logo">🌿 <span>AgroSmart</span></div>
+    <div <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroSmart - Crop Information</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green-dark:#1a3a2a;--green-mid:#2d6a4f;--green-accent:#52b788;
+      --green-light:#b7e4c7;--yellow:#f4d03f;--bg:#f0f7f1;--text:#1a2e20;
+    }
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    nav{background:var(--green-dark);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
+    .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--green-light);text-decoration:none}
+    .nav-links a{color:#a8d5b5;text-decoration:none;margin-left:1.5rem;font-size:0.9rem}
+
+    .hero{background:linear-gradient(135deg,var(--green-dark),var(--green-mid));color:white;padding:2.5rem 2rem;text-align:center}
+    .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;margin-bottom:0.5rem}
+    .hero h1 span{color:var(--yellow)}
+    .hero p{color:#a8d5b5;font-size:0.95rem}
+
+    .search-wrap{max-width:600px;margin:-1.5rem auto 0;padding:0 1.5rem;position:relative;z-index:10}
+    .search-box{display:flex;background:white;border-radius:999px;box-shadow:0 4px 20px rgba(45,106,79,0.2);overflow:hidden;border:2px solid var(--green-light)}
+    .search-box input{flex:1;padding:0.85rem 1.2rem;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:0.95rem;color:var(--text);background:transparent}
+    .search-box button{background:var(--green-mid);color:white;border:none;padding:0 1.5rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:background 0.2s}
+    .search-box button:hover{background:var(--green-dark)}
+
+    .main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+    /* AI Result */
+    .ai-result{display:none;background:white;border-radius:16px;border:2px solid var(--green-accent);padding:1.5rem;margin-bottom:1.5rem;animation:fadeUp 0.3s ease;box-shadow:0 4px 16px rgba(82,183,136,0.15)}
+    .ai-result.show{display:block}
+    .ai-badge{display:inline-flex;align-items:center;gap:0.4rem;background:var(--yellow);color:var(--green-dark);border-radius:999px;padding:0.25rem 0.75rem;font-size:0.72rem;font-weight:700;margin-bottom:0.8rem}
+    .ai-result h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--green-dark);margin-bottom:0.8rem}
+    .ai-section{background:#f5fcf7;border-left:3px solid var(--green-accent);border-radius:0 8px 8px 0;padding:0.8rem 1rem;margin-bottom:0.6rem}
+    .ai-section h4{font-size:0.8rem;font-weight:700;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem}
+    .ai-section p{font-size:0.9rem;line-height:1.6;color:#2d3a30}
+
+    /* Crop Cards */
+    .section-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--green-dark);margin-bottom:1rem;padding-top:1rem}
+    .crops-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+    .crop-card{background:white;border-radius:16px;padding:1.4rem;border:1px solid #d4edda;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(45,106,79,0.06)}
+    .crop-card:hover{border-color:var(--green-accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(45,106,79,0.12)}
+    .crop-icon{font-size:2rem;margin-bottom:0.6rem}
+    .crop-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--green-dark);margin-bottom:0.4rem}
+    .crop-tags{display:flex;gap:0.4rem;flex-wrap:wrap}
+    .tag{background:#e8f5e9;color:var(--green-mid);border-radius:999px;padding:0.2rem 0.6rem;font-size:0.75rem;font-weight:500}
+
+    /* Modal */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.show{display:flex}
+    .modal{background:white;border-radius:20px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;animation:fadeUp 0.3s ease}
+    .modal-header{background:linear-gradient(90deg,var(--green-dark),var(--green-mid));color:white;padding:1.2rem 1.5rem;border-radius:20px 20px 0 0;display:flex;justify-content:space-between;align-items:center}
+    .modal-header h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem}
+    .modal-close{background:none;border:none;color:white;font-size:1.4rem;cursor:pointer;line-height:1}
+    .modal-body{padding:1.5rem}
+    .info-row{display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid #e8f5e9;font-size:0.9rem}
+    .info-row:last-child{border-bottom:none}
+    .info-label{color:var(--green-mid);font-weight:600}
+    .info-value{color:var(--text);text-align:right;max-width:60%}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+    .not-found{display:none;text-align:center;padding:2rem;color:#888;font-size:0.95rem}
+    .not-found.show{display:block}
+    .back-btn{display:inline-block;margin-top:2rem;color:var(--green-mid);text-decoration:none;font-weight:600;font-size:0.9rem}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">🌿 AgroSmart</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="ai-assistant.html">🤖 AI</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>🌾 Crop <span>Information</span></h1>
+  <p>ফসলের নাম search করুন অথবা নিচে থেকে বেছে নিন</p>
+</div>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="ফসলের নাম লিখুন... যেমন: ধান, গম, বেগুন" onkeydown="if(event.key==='Enter')doSearch()"/>
+    <button onclick="doSearch()">🔍 Search</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- AI Result (shown when not found in DB) -->
+  <div class="ai-result" id="aiResult">
+    <div class="ai-badge">🤖 AI Generated Response</div>
+    <h3 id="aiTitle"></h3>
+    <div id="aiContent"></div>
+  </div>
+
+  <!-- Not found message -->
+  <div class="not-found" id="notFound">
+    ❌ কোনো তথ্য পাওয়া যায়নি।
+  </div>
+
+  <!-- Default crop cards -->
+  <div class="section-title" id="sectionTitle">📋 সকল ফসলের তালিকা</div>
+  <div class="crops-grid" id="cropsGrid"></div>
+
+  <a href="index.html" class="back-btn">← ফিরে যান</a>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle"></h2>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const CROPS = [
+  {
+    id:1, icon:'🌾', name:'Rice (ধান)', nameBn:'ধান',
+    season:'বর্ষা (Rainy)', soil:'কাদামাটি / দোআঁশ (Clay/Loamy)',
+    temp:'25–35°C', rainfall:'1200–2000mm', duration:'120–150 দিন',
+    fertilizer:'ইউরিয়া, TSP, MoP', desc:'বাংলাদেশের প্রধান খাদ্যশস্য। বর্ষাকালে জলাবদ্ধ জমিতে ভালো হয়।',
+    tips:'রোপণের আগে জমি ভালোভাবে চাষ দিন। সঠিক সময়ে সেচ দিন।'
+  },
+  {
+    id:2, icon:'🌿', name:'Wheat (গম)', nameBn:'গম',
+    season:'শীত (Winter)', soil:'দোআঁশ / বালিমাটি (Loamy/Sandy)',
+    temp:'15–25°C', rainfall:'450–650mm', duration:'110–130 দিন',
+    fertilizer:'ইউরিয়া, DAP', desc:'শীতকালীন ফসল। ঠান্ডা ও শুকনো আবহাওয়ায় ভালো জন্মায়।',
+    tips:'নভেম্বর-ডিসেম্বরে বীজ বপন করুন। অতিরিক্ত পানি ক্ষতিকর।'
+  },
+  {
+    id:3, icon:'🍅', name:'Tomato (টমেটো)', nameBn:'টমেটো',
+    season:'গ্রীষ্ম (Summer)', soil:'বালিমাটি (Sandy)',
+    temp:'20–30°C', rainfall:'600–1200mm', duration:'60–90 দিন',
+    fertilizer:'ইউরিয়া, TSP, পটাশ', desc:'সবজি হিসেবে সারা বছর চাহিদা আছে। বেলে দোআঁশ মাটিতে ভালো হয়।',
+    tips:'মাচা দিয়ে চাষ করুন। নিয়মিত কীটনাশক স্প্রে করুন।'
+  },
+  {
+    id:4, icon:'🌽', name:'Maize (ভুট্টা)', nameBn:'ভুট্টা',
+    season:'গ্রীষ্ম (Summer)', soil:'দোআঁশ (Loamy)',
+    temp:'21–34°C', rainfall:'600–900mm', duration:'90–120 দিন',
+    fertilizer:'ইউরিয়া, TSP, জিপসাম', desc:'পশুখাদ্য ও মানব খাদ্য হিসেবে ব্যবহার হয়। দ্রুত বর্ধনশীল।',
+    tips:'সারি করে রোপণ করুন। ফুল আসার সময় পানি দিন।'
+  },
+  {
+    id:5, icon:'🥔', name:'Potato (আলু)', nameBn:'আলু',
+    season:'শীত (Winter)', soil:'দোআঁশ (Loamy)',
+    temp:'15–20°C', rainfall:'500–700mm', duration:'75–100 দিন',
+    fertilizer:'ইউরিয়া, TSP, MoP, জৈব সার', desc:'বাংলাদেশের জনপ্রিয় সবজি। শীতকালে ব্যাপক চাষ হয়।',
+    tips:'বীজ আলু ভালোভাবে বাছাই করুন। মাটি আলগা রাখুন।'
+  },
+  {
+    id:6, icon:'🌱', name:'Jute (পাট)', nameBn:'পাট',
+    season:'বর্ষা (Rainy)', soil:'কাদামাটি (Clay)',
+    temp:'24–38°C', rainfall:'1500–2000mm', duration:'100–120 দিন',
+    fertilizer:'ইউরিয়া, TSP', desc:'বাংলাদেশের ঐতিহ্যবাহী অর্থকরী ফসল। সোনালী আঁশ নামে পরিচিত।',
+    tips:'মার্চ-এপ্রিলে বীজ বপন করুন। জমিতে পানি নিষ্কাশন নিশ্চিত করুন।'
+  },
+  {
+    id:7, icon:'🧅', name:'Onion (পেঁয়াজ)', nameBn:'পেঁয়াজ',
+    season:'শীত (Winter)', soil:'দোআঁশ (Loamy)',
+    temp:'13–24°C', rainfall:'650–750mm', duration:'100–120 দিন',
+    fertilizer:'ইউরিয়া, TSP, MoP', desc:'প্রতিদিনের রান্নায় অপরিহার্য। শীতকালে সারাদেশে চাষ হয়।',
+    tips:'চারা রোপণের আগে জমিতে জৈব সার দিন।'
+  },
+  {
+    id:8, icon:'🌶️', name:'Chili (মরিচ)', nameBn:'মরিচ',
+    season:'গ্রীষ্ম / শীত', soil:'বেলে দোআঁশ (Sandy Loamy)',
+    temp:'20–30°C', rainfall:'600–900mm', duration:'90–120 দিন',
+    fertilizer:'ইউরিয়া, TSP, পটাশ', desc:'মশলা ফসল হিসেবে সারা বছর চাহিদা থাকে।',
+    tips:'গাছে ফুল আসার সময় সেচ দিন। পোকামাকড় দমনে সতর্ক থাকুন।'
+  }
+];
+
+// AI Knowledge Base — database-এ নেই এমন ফসলের জন্য
+const AI_KNOWLEDGE = {
+  'বেগুন': {
+    desc:'বেগুন বাংলাদেশের অন্যতম জনপ্রিয় সবজি। সারা বছর চাষ হলেও শীতকালে বেশি উৎপাদন হয়।',
+    season:'সারা বছর (শীত ও গ্রীষ্ম)', soil:'দোআঁশ বা বেলে দোআঁশ মাটি',
+    temp:'22–32°C', fertilizer:'ইউরিয়া ১৫০ কেজি/হেক্টর, TSP ১০০ কেজি, MoP ৮০ কেজি',
+    tips:'ফল ছিদ্রকারী পোকা দমনে সেক্স ফেরোমন ফাঁদ ব্যবহার করুন। নিয়মিত সেচ দিন।'
+  },
+  'পালং': {
+    desc:'পালং শাক শীতকালীন পুষ্টিকর সবজি। ঠান্ডা আবহাওয়ায় ভালো জন্মায়।',
+    season:'শীতকাল (অক্টোবর–ফেব্রুয়ারি)', soil:'দোআঁশ মাটি',
+    temp:'15–20°C', fertilizer:'জৈব সার ও ইউরিয়া',
+    tips:'ঘন বপন এড়িয়ে চলুন। ৩০–৪০ দিনে প্রথম কাটা যায়।'
+  },
+  'লাউ': {
+    desc:'লাউ গ্রীষ্ম ও বর্ষা মৌসুমের জনপ্রিয় সবজি। মাচায় চাষ করলে ভালো ফলন হয়।',
+    season:'গ্রীষ্ম ও বর্ষা', soil:'দোআঁশ উর্বর মাটি',
+    temp:'25–35°C', fertilizer:'গোবর সার, ইউরিয়া, TSP',
+    tips:'মাচা তৈরি করুন। প্রতিদিন সেচ দিন গরমের সময়।'
+  },
+  'সরিষা': {
+    desc:'সরিষা শীতকালীন তেল ফসল। বাংলাদেশে ভোজ্যতেলের অন্যতম উৎস।',
+    season:'শীতকাল (অক্টোবর–নভেম্বর)', soil:'দোআঁশ ও এঁটেল মাটি',
+    temp:'10–25°C', fertilizer:'ইউরিয়া, TSP, সালফার',
+    tips:'সালফার সার অবশ্যই দিন। ৮০–৯০ দিনে ফসল কাটা যায়।'
+  }
+};
+
+function renderCards(list) {
+  const grid = document.getElementById('cropsGrid');
+  grid.innerHTML = '';
+  list.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'crop-card';
+    div.onclick = () => openModal(c);
+    div.innerHTML = `
+      <div class="crop-icon">${c.icon}</div>
+      <div class="crop-name">${c.name}</div>
+      <div class="crop-tags">
+        <span class="tag">📅 ${c.season}</span>
+        <span class="tag">🌱 ${c.soil.split('(')[0].trim()}</span>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  document.getElementById('aiResult').classList.remove('show');
+  document.getElementById('notFound').classList.remove('show');
+
+  if (!q) {
+    document.getElementById('sectionTitle').textContent = '📋 সকল ফসলের তালিকা';
+    renderCards(CROPS);
+    return;
+  }
+
+  // Search in database
+  const found = CROPS.filter(c =>
+    c.name.toLowerCase().includes(q) || c.nameBn.toLowerCase().includes(q)
+  );
+
+  if (found.length > 0) {
+    document.getElementById('sectionTitle').textContent = `🔍 "${q}" এর ফলাফল (Database)`;
+    renderCards(found);
+    return;
+  }
+
+  // Not in DB → check AI knowledge
+  document.getElementById('cropsGrid').innerHTML = '';
+  document.getElementById('sectionTitle').textContent = '';
+
+  const aiKey = Object.keys(AI_KNOWLEDGE).find(k => q.includes(k) || k.includes(q));
+
+  if (aiKey) {
+    const info = AI_KNOWLEDGE[aiKey];
+    document.getElementById('aiTitle').textContent = `🌿 ${aiKey} — AI Generated Information`;
+    document.getElementById('aiContent').innerHTML = `
+      <div class="ai-section"><h4>📖 বিবরণ</h4><p>${info.desc}</p></div>
+      <div class="ai-section"><h4>📅 মৌসুম</h4><p>${info.season}</p></div>
+      <div class="ai-section"><h4>🌡️ তাপমাত্রা</h4><p>${info.temp}</p></div>
+      <div class="ai-section"><h4>💊 সার</h4><p>${info.fertilizer}</p></div>
+      <div class="ai-section"><h4>💡 পরামর্শ</h4><p>${info.tips}</p></div>
+    `;
+    document.getElementById('aiResult').classList.add('show');
+  } else {
+    // Full AI simulation for completely unknown crops
+    document.getElementById('aiTitle').textContent = `🤖 "${q}" সম্পর্কে AI বিশ্লেষণ`;
+    document.getElementById('aiContent').innerHTML = `
+      <div class="ai-section"><h4>📖 বিবরণ</h4><p>"${q}" সম্পর্কে AI বিশ্লেষণ করছে... এই ফসলটি বাংলাদেশের বিভিন্ন অঞ্চলে চাষ হয়। সঠিক মাটি ও আবহাওয়া নিশ্চিত করে চাষ করলে ভালো ফলন পাওয়া যায়।</p></div>
+      <div class="ai-section"><h4>💡 সাধারণ পরামর্শ</h4><p>চাষের আগে স্থানীয় কৃষি অফিসে যোগাযোগ করুন। মাটি পরীক্ষা করে সার প্রয়োগ করুন। সঠিক মৌসুমে রোপণ করুন।</p></div>
+      <div class="ai-section"><h4>🌱 AI সুপারিশ</h4><p>আরও বিস্তারিত জানতে আমাদের <a href="ai-assistant.html" style="color:var(--green-mid);font-weight:600">AI Assistant</a> ব্যবহার করুন।</p></div>
+    `;
+    document.getElementById('aiResult').classList.add('show');
+  }
+}
+
+function openModal(c) {
+  document.getElementById('modalTitle').textContent = c.icon + ' ' + c.name;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="info-row"><span class="info-label">📅 মৌসুম</span><span class="info-value">${c.season}</span></div>
+    <div class="info-row"><span class="info-label">🌱 মাটি</span><span class="info-value">${c.soil}</span></div>
+    <div class="info-row"><span class="info-label">🌡️ তাপমাত্রা</span><span class="info-value">${c.temp}</span></div>
+    <div class="info-row"><span class="info-label">🌧️ বৃষ্টিপাত</span><span class="info-value">${c.rainfall}</span></div>
+    <div class="info-row"><span class="info-label">⏱️ সময়কাল</span><span class="info-value">${c.duration}</span></div>
+    <div class="info-row"><span class="info-label">💊 সার</span><span class="info-value">${c.fertilizer}</span></div>
+    <div style="margin-top:1rem;background:#f5fcf7;border-radius:10px;padding:1rem">
+      <p style="font-size:0.88rem;color:#2d3a30;line-height:1.6"><strong>📖 বিবরণ:</strong> ${c.desc}</p>
+      <p style="font-size:0.88rem;color:#2d3a30;line-height:1.6;margin-top:0.5rem"><strong>💡 টিপস:</strong> ${c.tips}</p>
+    </div>`;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal(e) { if(e.target.id==='modalOverlay') closeModalDirect(); }
+function closeModalDirect() { document.getElementById('modalOverlay').classList.remove('show'); }
+
+// Init
+renderCards(CROPS);
+</script>
+</body>
+</html>="logo">🌿 <span>AgroSmart</span></div>
   </div>
 
   

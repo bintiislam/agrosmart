@@ -1,99 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AgroSmart - Seasonal Guide</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroSmart - Seasonal Advice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--green-dark:#1a3a2a;--green-mid:#2d6a4f;--green-accent:#52b788;--green-light:#b7e4c7;--yellow:#f4d03f;--bg:#f0f7f1;--text:#1a2e20}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    nav{background:var(--green-dark);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
+    .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--green-light);text-decoration:none}
+    .nav-links a{color:#a8d5b5;text-decoration:none;margin-left:1.5rem;font-size:0.9rem}
+    .hero{background:linear-gradient(135deg,var(--green-dark),var(--green-mid));color:white;padding:2.5rem 2rem;text-align:center}
+    .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;margin-bottom:0.5rem}
+    .hero h1 span{color:var(--yellow)}
+    .hero p{color:#a8d5b5;font-size:0.95rem}
+    .search-wrap{max-width:600px;margin:-1.5rem auto 0;padding:0 1.5rem;position:relative;z-index:10}
+    .search-box{display:flex;background:white;border-radius:999px;box-shadow:0 4px 20px rgba(45,106,79,0.2);overflow:hidden;border:2px solid var(--green-light)}
+    .search-box input{flex:1;padding:0.85rem 1.2rem;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:0.95rem;color:var(--text);background:transparent}
+    .search-box button{background:var(--green-mid);color:white;border:none;padding:0 1.5rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:background 0.2s}
+    .search-box button:hover{background:var(--green-dark)}
+    .main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+    .ai-result{display:none;background:white;border-radius:16px;border:2px solid var(--green-accent);padding:1.5rem;margin-bottom:1.5rem;animation:fadeUp 0.3s ease;box-shadow:0 4px 16px rgba(82,183,136,0.15)}
+    .ai-result.show{display:block}
+    .ai-badge{display:inline-flex;align-items:center;gap:0.4rem;background:var(--yellow);color:var(--green-dark);border-radius:999px;padding:0.25rem 0.75rem;font-size:0.72rem;font-weight:700;margin-bottom:0.8rem}
+    .ai-result h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--green-dark);margin-bottom:0.8rem}
+    .ai-section{background:#f5fcf7;border-left:3px solid var(--green-accent);border-radius:0 8px 8px 0;padding:0.8rem 1rem;margin-bottom:0.6rem}
+    .ai-section h4{font-size:0.8rem;font-weight:700;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem}
+    .ai-section p{font-size:0.9rem;line-height:1.6;color:#2d3a30}
+    .season-tabs{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.5rem;padding-top:1rem}
+    .tab{padding:0.5rem 1.2rem;border-radius:999px;border:2px solid #d4edda;background:white;font-family:'Syne',sans-serif;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;color:var(--green-dark)}
+    .tab.active,.tab:hover{background:var(--green-mid);color:white;border-color:var(--green-mid)}
+    .season-card{background:white;border-radius:20px;padding:1.8rem;border:1px solid #d4edda;margin-bottom:1rem;box-shadow:0 2px 8px rgba(45,106,79,0.06)}
+    .season-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}
+    .season-icon{font-size:2.5rem}
+    .season-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--green-dark)}
+    .season-period{font-size:0.85rem;color:var(--green-mid)}
+    .crop-list{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem}
+    .crop-chip{background:#e8f5e9;color:var(--green-mid);border-radius:999px;padding:0.3rem 0.8rem;font-size:0.82rem;font-weight:500}
+    .advice-list{list-style:none;display:flex;flex-direction:column;gap:0.5rem}
+    .advice-list li{background:#f5fcf7;border-radius:8px;padding:0.6rem 0.9rem;font-size:0.88rem;line-height:1.5;color:#2d3a30;border-left:3px solid var(--green-accent)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .back-btn{display:inline-block;margin-top:2rem;color:var(--green-mid);text-decoration:none;font-weight:600;font-size:0.9rem}
+  </style>
 </head>
 <body>
+<nav>
+  <a href="index.html" class="nav-logo">🌿 AgroSmart</a>
+  <div class="nav-links"><a href="index.html">Home</a><a href="ai-assistant.html">🤖 AI</a></div>
+</nav>
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <div class="logo">🌿 <span>AgroSmart</span></div>
+<div class="hero">
+  <h1>📅 Seasonal <span>Advice</span></h1>
+  <p>মৌসুম বা ফসলের নাম দিয়ে search করুন</p>
+</div>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="যেমন: বর্ষা, শীতকালীন ফসল, গ্রীষ্মে কী চাষ হয়..." onkeydown="if(event.key==='Enter')doSearch()"/>
+    <button onclick="doSearch()">🔍 Search</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="ai-result" id="aiResult">
+    <div class="ai-badge">🤖 AI Generated Response</div>
+    <h3 id="aiTitle"></h3>
+    <div id="aiContent"></div>
   </div>
 
-  <!-- Main Content -->
-  <div class="page-container">
-
-    <h2 class="page-title" style="color: #4a7c3f;">🌤️ Seasonal Crop Guide</h2>
-
-    <!-- Season Tabs -->
-    <div class="season-tabs">
-      <button class="season-tab active" onclick="showSeason('summer', this)">Summer</button>
-      <button class="season-tab" onclick="showSeason('winter', this)">Winter</button>
-      <button class="season-tab" onclick="showSeason('rainy', this)">Rainy</button>
-    </div>
-
-    <!-- Season Table -->
-    <div class="season-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Crop</th>
-            <th>Planting Time</th>
-            <th>Harvest Time</th>
-            <th>Soil Type</th>
-          </tr>
-        </thead>
-        <tbody id="seasonTableBody">
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Bottom Buttons -->
-    <div class="btn-row">
-      <button class="btn btn-back" onclick="history.back()">Back</button>
-      <a href="index.html" class="btn btn-back">Return Home</a>
-    </div>
-
+  <!-- Season Filter Tabs -->
+  <div class="season-tabs">
+    <button class="tab active" onclick="filterSeason('all',this)">🌍 সব মৌসুম</button>
+    <button class="tab" onclick="filterSeason('summer',this)">☀️ গ্রীষ্ম</button>
+    <button class="tab" onclick="filterSeason('rainy',this)">🌧️ বর্ষা</button>
+    <button class="tab" onclick="filterSeason('winter',this)">❄️ শীত</button>
+    <button class="tab" onclick="filterSeason('spring',this)">🌸 বসন্ত</button>
   </div>
 
-  <script>
-    
-    const seasonData = {
-      summer: [
-        ['🌽 Maize', 'March - April', 'June - July', 'Loamy'],
-        ['🍅 Tomato', 'February - March', 'May - June', 'Sandy / Loamy'],
-        ['🥦 Vegetables', 'March - April', 'May - June', 'Loamy'],
-        ['🌶️ Chili', 'February - March', 'May - June', 'Sandy Loam']
-      ],
-      winter: [
-        ['🌿 Wheat', 'November - December', 'March - April', 'Loamy'],
-        ['🥔 Potato', 'October - November', 'January - February', 'Loamy'],
-        ['🧅 Onion', 'October - November', 'February - March', 'Sandy Loam'],
-        ['🥕 Carrot', 'October - November', 'January - February', 'Sandy Loam']
-      ],
-      rainy: [
-        ['🌾 Rice', 'June - July', 'October - November', 'Clay / Loamy'],
-        ['🌱 Jute', 'April - May', 'July - August', 'Clay'],
-        ['🌽 Aus Rice', 'April - May', 'July - August', 'Loamy'],
-        ['🎋 Sugarcane', 'February - March', 'December - January', 'Loamy']
-      ]
-    };
+  <div id="seasonCards"></div>
+  <a href="index.html" class="back-btn">← ফিরে যান</a>
+</div>
 
-    
-    function showSeason(season, btn) {
-      
-      document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
+<script>
+const SEASONS = [
+  {
+    id:'summer', icon:'☀️', name:'গ্রীষ্মকাল', period:'মার্চ – জুন',
+    temp:'30–40°C', rainfall:'কম (৫০–১৫০mm/মাস)',
+    crops:['টমেটো','ভুট্টা','লাউ','ঢেঁড়শ','পটল','করলা','শশা'],
+    advice:[
+      'সকাল বা সন্ধ্যায় সেচ দিন — দুপুরে দেবেন না',
+      'মালচিং করুন মাটির আর্দ্রতা ধরে রাখতে',
+      'তাপ সহিষ্ণু জাত বেছে নিন',
+      'ঘন ঘন সেচের ব্যবস্থা রাখুন',
+      'গাছের গোড়ায় খড় বিছিয়ে দিন'
+    ]
+  },
+  {
+    id:'rainy', icon:'🌧️', name:'বর্ষাকাল', period:'জুন – সেপ্টেম্বর',
+    temp:'25–35°C', rainfall:'বেশি (২৫০–৫০০mm/মাস)',
+    crops:['ধান','পাট','কচু','আউশ ধান','বোনা আমন'],
+    advice:[
+      'পানি নিষ্কাশনের ব্যবস্থা ভালো রাখুন',
+      'ছত্রাকনাশক স্প্রে করুন নিয়মিত',
+      'জলাবদ্ধতা সহ্য করতে পারে এমন জাত বেছে নিন',
+      'বজ্রপাত থেকে সতর্ক থাকুন মাঠে কাজ করার সময়',
+      'আগাছা দমনে বিশেষ মনোযোগ দিন'
+    ]
+  },
+  {
+    id:'winter', icon:'❄️', name:'শীতকাল', period:'নভেম্বর – ফেব্রুয়ারি',
+    temp:'10–22°C', rainfall:'কম (২০–৫০mm/মাস)',
+    crops:['গম','আলু','সরিষা','পেঁয়াজ','রসুন','মুলা','বাঁধাকপি','ফুলকপি','পালং শাক'],
+    advice:[
+      'শিশির ও কুয়াশা থেকে চারা রক্ষা করুন',
+      'সকালে সেচ দিন বিকেলে নয়',
+      'পোকামাকড়ের আক্রমণ কম — তবে সতর্ক থাকুন',
+      'বীজ বপনের সঠিক সময় মেনে চলুন',
+      'ঠান্ডায় সার শোষণ কমে যায় — পরিমাণ একটু বাড়ান'
+    ]
+  },
+  {
+    id:'spring', icon:'🌸', name:'বসন্তকাল', period:'ফেব্রুয়ারি – মার্চ',
+    temp:'20–30°C', rainfall:'মাঝারি',
+    crops:['বোরো ধান','মরিচ','বেগুন','টমেটো','তরমুজ'],
+    advice:[
+      'বোরো ধান রোপণের সেরা সময়',
+      'তাপমাত্রা বাড়তে থাকে — সেচ পরিকল্পনা করুন',
+      'রবি ফসল তোলার সময় সাবধানে তুলুন',
+      'খরিফ ফসলের প্রস্তুতি নিন',
+      'জমি পরীক্ষা করে পরবর্তী মৌসুমের পরিকল্পনা করুন'
+    ]
+  }
+];
 
-      
-      const data = seasonData[season];
-      const rowsHtml = data.map(row =>
-        `<tr>
-          <td>${row[0]}</td>
-          <td>${row[1]}</td>
-          <td>${row[2]}</td>
-          <td>${row[3]}</td>
-        </tr>`
-      ).join('');
+const AI_SEASON = {
+  'খরিফ': 'খরিফ মৌসুম বর্ষাকালীন (জুন–নভেম্বর)। প্রধান ফসল: আমন ধান, পাট, আউশ ধান। বেশি বৃষ্টিপাতে উপযুক্ত ফসল বেছে নিন।',
+  'রবি': 'রবি মৌসুম শীতকালীন (নভেম্বর–মার্চ)। প্রধান ফসল: গম, সরিষা, আলু, শাকসবজি। ঠান্ডা আবহাওয়ায় ফলন ভালো হয়।',
+  'বোরো': 'বোরো মৌসুম (জানুয়ারি–মে)। শুধুমাত্র সেচের উপর নির্ভরশীল ধান চাষ। উচ্চ ফলনশীল জাত ব্যবহার করুন।'
+};
 
-      document.getElementById('seasonTableBody').innerHTML = rowsHtml;
-    }
+let currentFilter = 'all';
 
-    
-    showSeason('summer', document.querySelector('.season-tab'));
-  </script>
+function renderSeasons(list) {
+  const container = document.getElementById('seasonCards');
+  container.innerHTML = '';
+  list.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'season-card';
+    div.innerHTML = `
+      <div class="season-header">
+        <div class="season-icon">${s.icon}</div>
+        <div>
+          <div class="season-name">${s.name}</div>
+          <div class="season-period">📅 ${s.period} &nbsp;|&nbsp; 🌡️ ${s.temp} &nbsp;|&nbsp; 🌧️ ${s.rainfall}</div>
+        </div>
+      </div>
+      <p style="font-size:0.85rem;font-weight:600;color:var(--green-mid);margin-bottom:0.5rem">🌾 এই মৌসুমের ফসল:</p>
+      <div class="crop-list">${s.crops.map(c=>`<span class="crop-chip">${c}</span>`).join('')}</div>
+      <p style="font-size:0.85rem;font-weight:600;color:var(--green-mid);margin:0.8rem 0 0.5rem">💡 কৃষি পরামর্শ:</p>
+      <ul class="advice-list">${s.advice.map(a=>`<li>✅ ${a}</li>`).join('')}</ul>`;
+    container.appendChild(div);
+  });
+}
 
+function filterSeason(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = id;
+  document.getElementById('aiResult').classList.remove('show');
+  document.getElementById('searchInput').value = '';
+  const list = id === 'all' ? SEASONS : SEASONS.filter(s => s.id === id);
+  renderSeasons(list);
+}
+
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  document.getElementById('aiResult').classList.remove('show');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab').classList.add('active');
+
+  if (!q) { renderSeasons(SEASONS); return; }
+
+  // Search in DB
+  const found = SEASONS.filter(s =>
+    s.name.toLowerCase().includes(q) ||
+    s.id.includes(q) ||
+    s.crops.some(c => c.toLowerCase().includes(q)) ||
+    s.advice.some(a => a.toLowerCase().includes(q))
+  );
+
+  if (found.length > 0) {
+    renderSeasons(found);
+    return;
+  }
+
+  // AI fallback
+  renderSeasons([]);
+  const aiKey = Object.keys(AI_SEASON).find(k => q.includes(k) || k.includes(q));
+  document.getElementById('aiTitle').textContent = `📅 "${q}" সম্পর্কে AI বিশ্লেষণ`;
+
+  if (aiKey) {
+    document.getElementById('aiContent').innerHTML = `
+      <div class="ai-section"><h4>📖 AI তথ্য</h4><p>${AI_SEASON[aiKey]}</p></div>
+      <div class="ai-section"><h4>💡 পরামর্শ</h4><p>আরও বিস্তারিত জানতে <a href="ai-assistant.html" style="color:var(--green-mid);font-weight:600">AI Assistant</a> ব্যবহার করুন।</p></div>`;
+  } else {
+    document.getElementById('aiContent').innerHTML = `
+      <div class="ai-section"><h4>🤖 AI বিশ্লেষণ</h4><p>"${q}" সম্পর্কে: বাংলাদেশে সাধারণত তিনটি মূল কৃষি মৌসুম আছে — খরিফ (বর্ষা), রবি (শীত) ও বোরো (শুষ্ক)। আপনার প্রশ্নের জন্য স্থানীয় কৃষি বিশেষজ্ঞের সাথে যোগাযোগ করুন।</p></div>
+      <div class="ai-section"><h4>💡 পরামর্শ</h4><p><a href="ai-assistant.html" style="color:var(--green-mid);font-weight:600">AI Assistant</a>-এ বিস্তারিত জিজ্ঞেস করুন।</p></div>`;
+  }
+  document.getElementById('aiResult').classList.add('show');
+}
+
+renderSeasons(SEASONS);
+</script>
 </body>
 </html>

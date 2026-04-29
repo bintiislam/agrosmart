@@ -1,112 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AgroSmart - Fertilizer Guide</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--green-dark:#1a3a2a;--green-mid:#2d6a4f;--green-accent:#52b788;--green-light:#b7e4c7;--yellow:#f4d03f;--bg:#f0f7f1;--text:#1a2e20}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    nav{background:var(--green-dark);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
+    .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--green-light);text-decoration:none}
+    .nav-links a{color:#a8d5b5;text-decoration:none;margin-left:1.5rem;font-size:0.9rem}
+    .hero{background:linear-gradient(135deg,var(--green-dark),var(--green-mid));color:white;padding:2.5rem 2rem;text-align:center}
+    .hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;margin-bottom:0.5rem}
+    .hero h1 span{color:var(--yellow)}
+    .hero p{color:#a8d5b5;font-size:0.95rem}
+    .search-wrap{max-width:600px;margin:-1.5rem auto 0;padding:0 1.5rem;position:relative;z-index:10}
+    .search-box{display:flex;background:white;border-radius:999px;box-shadow:0 4px 20px rgba(45,106,79,0.2);overflow:hidden;border:2px solid var(--green-light)}
+    .search-box input{flex:1;padding:0.85rem 1.2rem;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:0.95rem;color:var(--text);background:transparent}
+    .search-box button{background:var(--green-mid);color:white;border:none;padding:0 1.5rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:background 0.2s}
+    .search-box button:hover{background:var(--green-dark)}
+    .main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+    .ai-result{display:none;background:white;border-radius:16px;border:2px solid var(--green-accent);padding:1.5rem;margin-bottom:1.5rem;animation:fadeUp 0.3s ease;box-shadow:0 4px 16px rgba(82,183,136,0.15)}
+    .ai-result.show{display:block}
+    .ai-badge{display:inline-flex;align-items:center;gap:0.4rem;background:var(--yellow);color:var(--green-dark);border-radius:999px;padding:0.25rem 0.75rem;font-size:0.72rem;font-weight:700;margin-bottom:0.8rem}
+    .ai-result h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--green-dark);margin-bottom:0.8rem}
+    .ai-section{background:#f5fcf7;border-left:3px solid var(--green-accent);border-radius:0 8px 8px 0;padding:0.8rem 1rem;margin-bottom:0.6rem}
+    .ai-section h4{font-size:0.8rem;font-weight:700;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem}
+    .ai-section p{font-size:0.9rem;line-height:1.6;color:#2d3a30}
+    .section-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--green-dark);margin-bottom:1rem;padding-top:1rem}
+    .fert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+    .fert-card{background:white;border-radius:16px;padding:1.4rem;border:1px solid #d4edda;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(45,106,79,0.06)}
+    .fert-card:hover{border-color:var(--green-accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(45,106,79,0.12)}
+    .fert-icon{font-size:2rem;margin-bottom:0.6rem}
+    .fert-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--green-dark);margin-bottom:0.3rem}
+    .fert-type{font-size:0.78rem;color:var(--green-mid);font-weight:500;margin-bottom:0.5rem}
+    .tag{background:#e8f5e9;color:var(--green-mid);border-radius:999px;padding:0.2rem 0.6rem;font-size:0.75rem;font-weight:500;display:inline-block}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.show{display:flex}
+    .modal{background:white;border-radius:20px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;animation:fadeUp 0.3s ease}
+    .modal-header{background:linear-gradient(90deg,var(--green-dark),var(--green-mid));color:white;padding:1.2rem 1.5rem;border-radius:20px 20px 0 0;display:flex;justify-content:space-between;align-items:center}
+    .modal-header h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem}
+    .modal-close{background:none;border:none;color:white;font-size:1.4rem;cursor:pointer}
+    .modal-body{padding:1.5rem}
+    .info-row{display:flex;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid #e8f5e9;font-size:0.9rem}
+    .info-row:last-child{border-bottom:none}
+    .info-label{color:var(--green-mid);font-weight:600}
+    .info-value{color:var(--text);text-align:right;max-width:60%}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .back-btn{display:inline-block;margin-top:2rem;color:var(--green-mid);text-decoration:none;font-weight:600;font-size:0.9rem}
+  </style>
 </head>
 <body>
+<nav>
+  <a href="index.html" class="nav-logo">🌿 AgroSmart</a>
+  <div class="nav-links"><a href="index.html">Home</a><a href="ai-assistant.html">🤖 AI</a></div>
+</nav>
 
-  
-  <div class="navbar">
-    <div class="logo">🌿 <span>AgroSmart</span></div>
+<div class="hero">
+  <h1>💊 Fertilizer <span>Guide</span></h1>
+  <p>সারের নাম বা ফসলের নাম দিয়ে search করুন</p>
+</div>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="যেমন: ইউরিয়া, ধানের সার, জৈব সার..." onkeydown="if(event.key==='Enter')doSearch()"/>
+    <button onclick="doSearch()">🔍 Search</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="ai-result" id="aiResult">
+    <div class="ai-badge">🤖 AI Generated Response</div>
+    <h3 id="aiTitle"></h3>
+    <div id="aiContent"></div>
   </div>
 
-  
-  <div class="page-container">
-    <div class="fertilizer-box">
+  <div class="section-title" id="sectionTitle">📋 সকল সারের তালিকা</div>
+  <div class="fert-grid" id="fertGrid"></div>
+  <a href="index.html" class="back-btn">← ফিরে যান</a>
+</div>
 
-      <h2>🧪 Fertilizer Guide</h2>
-
-      
-      <div class="form-group">
-        <label>Select Crop:</label>
-        <select id="cropSelect" onchange="showFertilizer()">
-          <option value="">-- Select Crop --</option>
-          <option value="Rice">Rice</option>
-          <option value="Wheat">Wheat</option>
-          <option value="Tomato">Tomato</option>
-          <option value="Maize">Maize</option>
-          <option value="Potato">Potato</option>
-          <option value="Jute">Jute</option>
-        </select>
-      </div>
-
-      
-      <div class="fertilizer-result" id="fertResult" style="display:none;">
-        <h3>Fertilizer Recommendation</h3>
-        <table id="fertTable">
-        </table>
-      </div>
-
-
-      <div class="btn-row">
-        <button class="btn btn-back" onclick="history.back()">Back</button>
-        <a href="index.html" class="btn btn-back">Return Home</a>
-      </div>
-
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle"></h2>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
     </div>
+    <div class="modal-body" id="modalBody"></div>
   </div>
+</div>
 
-  <script>
-   
-    const fertData = {
-      Rice: [
-        ['Urea (Nitrogen)', '80 kg/acre'],
-        ['TSP (Phosphorus)', '55 kg/acre'],
-        ['MOP (Potassium)', '40 kg/acre'],
-        ['Gypsum (Sulfur)', '30 kg/acre']
-      ],
-      Wheat: [
-        ['Urea (Nitrogen)', '65 kg/acre'],
-        ['TSP (Phosphorus)', '50 kg/acre'],
-        ['MOP (Potassium)', '30 kg/acre'],
-        ['Gypsum (Sulfur)', '20 kg/acre']
-      ],
-      Tomato: [
-        ['Urea (Nitrogen)', '70 kg/acre'],
-        ['TSP (Phosphorus)', '60 kg/acre'],
-        ['MOP (Potassium)', '50 kg/acre'],
-        ['Compost/Organic', '2 tons/acre'],
-        ['Boron (micronutrient)', '2 kg/acre']
-      ],
-      Maize: [
-        ['Urea (Nitrogen)', '90 kg/acre'],
-        ['TSP (Phosphorus)', '60 kg/acre'],
-        ['MOP (Potassium)', '40 kg/acre'],
-        ['Zinc Sulfate', '5 kg/acre']
-      ],
-      Potato: [
-        ['Urea (Nitrogen)', '75 kg/acre'],
-        ['TSP (Phosphorus)', '55 kg/acre'],
-        ['MOP (Potassium)', '60 kg/acre'],
-        ['Compost/Organic', '2 tons/acre']
-      ],
-      Jute: [
-        ['Urea (Nitrogen)', '60 kg/acre'],
-        ['TSP (Phosphorus)', '40 kg/acre'],
-        ['MOP (Potassium)', '30 kg/acre'],
-        ['Gypsum (Sulfur)', '20 kg/acre']
-      ]
-    };
+<script>
+const FERTILIZERS = [
+  {
+    id:1,icon:'🟡',name:'ইউরিয়া (Urea)',type:'নাইট্রোজেন সার',
+    nutrient:'নাইট্রোজেন ৪৬%',crops:'ধান, গম, ভুট্টা, সব ফসল',
+    dose:'১৫০–২৫০ কেজি/হেক্টর',time:'রোপণের ১৫–২০ দিন পর',
+    benefit:'গাছের পাতা সবুজ করে, দ্রুত বৃদ্ধি ঘটায়',
+    caution:'অতিরিক্ত ব্যবহারে পোড়া ক্ষতি হয়। ভেজা মাটিতে প্রয়োগ করুন।'
+  },
+  {
+    id:2,icon:'⚫',name:'TSP (ট্রিপল সুপার ফসফেট)',type:'ফসফেট সার',
+    nutrient:'ফসফরাস ৪৬%',crops:'ধান, গম, আলু, সব ফসল',
+    dose:'৮০–১২০ কেজি/হেক্টর',time:'জমি তৈরির সময়',
+    benefit:'শিকড় মজবুত করে, ফল ও বীজ গঠনে সাহায্য করে',
+    caution:'এক সাথে ইউরিয়া মিশিয়ে দেবেন না।'
+  },
+  {
+    id:3,icon:'🔴',name:'MoP (মিউরেট অফ পটাশ)',type:'পটাশ সার',
+    nutrient:'পটাশিয়াম ৬০%',crops:'আলু, টমেটো, কলা, সব ফসল',
+    dose:'৮০–১০০ কেজি/হেক্টর',time:'জমি তৈরির সময় বা শেষ চাষে',
+    benefit:'রোগ প্রতিরোধ বাড়ায়, ফলের মান উন্নত করে',
+    caution:'লবণাক্ত মাটিতে কম ব্যবহার করুন।'
+  },
+  {
+    id:4,icon:'🟤',name:'DAP (ডাই অ্যামোনিয়াম ফসফেট)',type:'মিশ্র সার',
+    nutrient:'নাইট্রোজেন ১৮%, ফসফরাস ৪৬%',crops:'গম, ভুট্টা, সরিষা',
+    dose:'১০০–১৫০ কেজি/হেক্টর',time:'বীজ বপনের সময়',
+    benefit:'দুটি পুষ্টি একসাথে সরবরাহ করে',
+    caution:'বীজের সাথে সরাসরি মেশাবেন না।'
+  },
+  {
+    id:5,icon:'🟫',name:'জৈব সার (Organic)',type:'জৈব সার',
+    nutrient:'নাইট্রোজেন, ফসফরাস, পটাশ (কম)',crops:'সব ধরনের ফসল',
+    dose:'৫–১০ টন/হেক্টর',time:'জমি তৈরির ১৫–২০ দিন আগে',
+    benefit:'মাটির গুণমান বাড়ায়, দীর্ঘমেয়াদী উপকার',
+    caution:'কাঁচা গোবর সরাসরি দেবেন না।'
+  },
+  {
+    id:6,icon:'⬜',name:'জিপসাম (Gypsum)',type:'সালফার সার',
+    nutrient:'সালফার ১৭%, ক্যালসিয়াম ২২%',crops:'সরিষা, মূলা, পেঁয়াজ',
+    dose:'১৫০–২০০ কেজি/হেক্টর',time:'জমি তৈরির শেষ চাষে',
+    benefit:'তৈলবীজ ফসলে অপরিহার্য',
+    caution:'অতিরিক্ত ব্যবহার এড়িয়ে চলুন।'
+  }
+];
 
-    function showFertilizer() {
-      const crop = document.getElementById('cropSelect').value;
+const AI_FERT = {
+  'বোরন': {
+    desc:'বোরন একটি সূক্ষ্ম পুষ্টি উপাদান সার। ফুল ও ফল গঠনে সাহায্য করে।',
+    dose:'১–২ কেজি/হেক্টর', crops:'টমেটো, বেগুন, সূর্যমুখী',
+    time:'ফুল আসার আগে', caution:'অতিরিক্ত বোরন গাছের জন্য ক্ষতিকর।'
+  },
+  'জিংক': {
+    desc:'জিংক সার ধান চাষে বিশেষভাবে গুরুত্বপূর্ণ। পাতার হলদে ভাব দূর করে।',
+    dose:'১০–১৫ কেজি/হেক্টর (zinc sulfate)', crops:'ধান, গম, ভুট্টা',
+    time:'জমি তৈরির সময়', caution:'মাটি পরীক্ষার পর ব্যবহার করুন।'
+  },
+  'কম্পোস্ট': {
+    desc:'কম্পোস্ট সার গাছের অবশিষ্টাংশ পচিয়ে তৈরি। মাটির গুণমান বৃদ্ধি করে।',
+    dose:'৫–৮ টন/হেক্টর', crops:'সব ফসল',
+    time:'রোপণের ২–৩ সপ্তাহ আগে', caution:'ভালোভাবে পচা কম্পোস্ট ব্যবহার করুন।'
+  }
+};
 
-      if (!crop) {
-        document.getElementById('fertResult').style.display = 'none';
-        return;
-      }
+function renderCards(list) {
+  const grid = document.getElementById('fertGrid');
+  grid.innerHTML = '';
+  list.forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'fert-card';
+    div.onclick = () => openModal(f);
+    div.innerHTML = `
+      <div class="fert-icon">${f.icon}</div>
+      <div class="fert-name">${f.name}</div>
+      <div class="fert-type">${f.type}</div>
+      <span class="tag">🌱 ${f.crops.split(',')[0]}</span>`;
+    grid.appendChild(div);
+  });
+}
 
-      const data = fertData[crop];
-      const tableHtml = data.map(row =>
-        `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`
-      ).join('');
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  document.getElementById('aiResult').classList.remove('show');
 
-      document.getElementById('fertTable').innerHTML = tableHtml;
-      document.getElementById('fertResult').style.display = 'block';
-    }
-  </script>
+  if (!q) { document.getElementById('sectionTitle').textContent='📋 সকল সারের তালিকা'; renderCards(FERTILIZERS); return; }
 
+  const found = FERTILIZERS.filter(f =>
+    f.name.toLowerCase().includes(q) || f.type.toLowerCase().includes(q) ||
+    f.crops.toLowerCase().includes(q) || f.nutrient.toLowerCase().includes(q)
+  );
+
+  if (found.length > 0) {
+    document.getElementById('sectionTitle').textContent = `🔍 "${q}" এর ফলাফল (Database)`;
+    renderCards(found);
+    return;
+  }
+
+  document.getElementById('fertGrid').innerHTML = '';
+  document.getElementById('sectionTitle').textContent = '';
+
+  const aiKey = Object.keys(AI_FERT).find(k => q.includes(k) || k.includes(q));
+  if (aiKey) {
+    const info = AI_FERT[aiKey];
+    document.getElementById('aiTitle').textContent = `💊 ${aiKey} — AI Generated Information`;
+    document.getElementById('aiContent').innerHTML = `
+      <div class="ai-section"><h4>📖 বিবরণ</h4><p>${info.desc}</p></div>
+      <div class="ai-section"><h4>🌾 উপযুক্ত ফসল</h4><p>${info.crops}</p></div>
+      <div class="ai-section"><h4>📏 মাত্রা</h4><p>${info.dose}</p></div>
+      <div class="ai-section"><h4>📅 প্রয়োগের সময়</h4><p>${info.time}</p></div>
+      <div class="ai-section"><h4>⚠️ সতর্কতা</h4><p>${info.caution}</p></div>`;
+  } else {
+    document.getElementById('aiTitle').textContent = `🤖 "${q}" সম্পর্কে AI বিশ্লেষণ`;
+    document.getElementById('aiContent').innerHTML = `
+      <div class="ai-section"><h4>📖 AI বিশ্লেষণ</h4><p>"${q}" সম্পর্কে: এই সার বা পুষ্টি উপাদানটি মাটির pH ও ফসলের ধরন বিবেচনা করে ব্যবহার করতে হয়। স্থানীয় কৃষি অফিস থেকে মাটি পরীক্ষার মাধ্যমে সঠিক মাত্রা নির্ধারণ করুন।</p></div>
+      <div class="ai-section"><h4>💡 পরামর্শ</h4><p>আরও তথ্যের জন্য আমাদের <a href="ai-assistant.html" style="color:var(--green-mid);font-weight:600">AI Assistant</a> ব্যবহার করুন।</p></div>`;
+  }
+  document.getElementById('aiResult').classList.add('show');
+}
+
+function openModal(f) {
+  document.getElementById('modalTitle').textContent = f.icon + ' ' + f.name;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="info-row"><span class="info-label">🧪 পুষ্টি উপাদান</span><span class="info-value">${f.nutrient}</span></div>
+    <div class="info-row"><span class="info-label">🌾 উপযুক্ত ফসল</span><span class="info-value">${f.crops}</span></div>
+    <div class="info-row"><span class="info-label">📏 মাত্রা</span><span class="info-value">${f.dose}</span></div>
+    <div class="info-row"><span class="info-label">📅 প্রয়োগের সময়</span><span class="info-value">${f.time}</span></div>
+    <div style="margin-top:1rem;background:#f5fcf7;border-radius:10px;padding:1rem">
+      <p style="font-size:0.88rem;color:#2d3a30;line-height:1.6"><strong>✅ উপকারিতা:</strong> ${f.benefit}</p>
+      <p style="font-size:0.88rem;color:#c0392b;line-height:1.6;margin-top:0.5rem"><strong>⚠️ সতর্কতা:</strong> ${f.caution}</p>
+    </div>`;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal(e){if(e.target.id==='modalOverlay')closeModalDirect()}
+function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('show')}
+
+renderCards(FERTILIZERS);
+</script>
 </body>
 </html>
