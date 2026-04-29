@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AgroSmart - Admin Manage</title>
+  <title>AgroSmart - Manage Content</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-  
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
     <nav>
@@ -17,85 +16,111 @@
     </nav>
   </div>
 
-  
   <div class="dashboard-layout">
-
-    
     <div class="sidebar">
-      <a href="admin-dashboard.html">Profile</a>
       <a href="admin-dashboard.html">Manage Crops</a>
-      <a href="admin-dashboard.html">Manage Users</a>
       <a href="admin-manage.html" class="active">Manage Content</a>
       <a href="seasonal-guide.html">Seasonal Data</a>
       <a href="crop-info.html">Crop Information</a>
       <a href="fertilizer-guide.html">Fertilizer Information</a>
     </div>
 
-    
     <div class="dashboard-content">
+      <h2 style="color:#2d5a27;margin-bottom:25px;">Manage Content</h2>
 
-      <h2 style="color:#2d5a27; margin-bottom:25px;">Admin Dashboard</h2>
 
-      
-      <div style="margin-bottom: 30px;">
-        <div class="admin-section-title">
-          <h3>👥 Manage Users</h3>
-          <button class="btn btn-green btn-small">Edit</button>
-        </div>
+      <div style="margin-bottom:25px;">
         <table class="admin-table">
           <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="usersBody">
-          </tbody>
-        </table>
-      </div>
-
-      
-      <div style="margin-bottom: 30px;">
-        <div class="admin-section-title">
-          <h3>📋 Manage Content</h3>
-        </div>
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Content</th>
-              <th>Action</th>
-            </tr>
+            <tr><th>Content</th><th>Action</th></tr>
           </thead>
           <tbody>
             <tr>
-              <td>Fertilizer Guide</td>
-              <td>
-                <button class="btn btn-green btn-small" onclick="window.location.href='fertilizer-guide.html'">Edit</button>
-              </td>
+              <td>🧪 Fertilizer Guide</td>
+              <td><button class="btn btn-green btn-small" onclick="showSection('fert')">Edit</button></td>
             </tr>
             <tr>
-              <td>Seasonal Data</td>
-              <td>
-                <button class="btn btn-green btn-small" onclick="window.location.href='seasonal-guide.html'">Edit</button>
-              </td>
+              <td>📅 Seasonal Data</td>
+              <td><button class="btn btn-green btn-small" onclick="showSection('season')">Edit</button></td>
             </tr>
             <tr>
-              <td>Crop Information</td>
-              <td>
-                <button class="btn btn-green btn-small" onclick="window.location.href='crop-info.html'">Edit</button>
-              </td>
+              <td>🌾 Crop Information</td>
+              <td><button class="btn btn-green btn-small" onclick="showSection('cropinfo')">Edit</button></td>
+            </tr>
+            <tr>
+              <td>⚠️ Disease Alert</td>
+              <td><button class="btn btn-green btn-small" onclick="showSection('alert')">Edit</button></td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      
-      <div class="btn-row">
+      <div id="fertSection" class="edit-section" style="display:none;">
+        <h3 style="color:#2d5a27;margin-bottom:15px;">✏️ Edit Fertilizer Guide — Rice (Demo)</h3>
+        <p style="font-size:0.85rem;color:#666;margin-bottom:15px;">Update fertilizer amounts for Rice as a demonstration.</p>
+        <div class="form-group"><label>Urea (kg/acre):</label><input type="text" id="fertUrea" value="80" /></div>
+        <div class="form-group"><label>TSP (kg/acre):</label><input type="text" id="fertTSP" value="55" /></div>
+        <div class="form-group"><label>MOP (kg/acre):</label><input type="text" id="fertMOP" value="40" /></div>
+        <div class="form-group"><label>Gypsum (kg/acre):</label><input type="text" id="fertGyp" value="30" /></div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="hideAll()">Cancel</button>
+          <button class="btn btn-green" onclick="save('fert')">Save Changes</button>
+        </div>
+      </div>
+
+      <div id="seasonSection" class="edit-section" style="display:none;">
+        <h3 style="color:#2d5a27;margin-bottom:15px;">✏️ Edit Seasonal Data</h3>
+        <div class="form-group"><label>Summer Season Crops:</label><input type="text" id="summerCrops" value="Maize, Tomato, Vegetables, Chili" /></div>
+        <div class="form-group"><label>Winter Season Crops:</label><input type="text" id="winterCrops" value="Wheat, Potato, Onion, Carrot" /></div>
+        <div class="form-group"><label>Rainy Season Crops:</label><input type="text" id="rainyCrops" value="Rice, Jute, Aus Rice, Sugarcane" /></div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="hideAll()">Cancel</button>
+          <button class="btn btn-green" onclick="save('season')">Save Changes</button>
+        </div>
+      </div>
+
+      <div id="cropinfoSection" class="edit-section" style="display:none;">
+        <h3 style="color:#2d5a27;margin-bottom:15px;">✏️ Edit Crop Information</h3>
+        <p style="font-size:0.85rem;color:#666;margin-bottom:15px;">Select a crop to update its information.</p>
+        <div class="form-group">
+          <label>Select Crop:</label>
+          <select id="cropSelect" onchange="loadCropInfo()">
+            <option value="">-- Select --</option>
+            <option value="Rice">Rice</option>
+            <option value="Wheat">Wheat</option>
+            <option value="Tomato">Tomato</option>
+            <option value="Maize">Maize</option>
+            <option value="Potato">Potato</option>
+            <option value="Jute">Jute</option>
+          </select>
+        </div>
+        <div id="cropInfoFields" style="display:none;">
+          <div class="form-group"><label>Description:</label><textarea id="ciDesc" rows="3" style="width:100%;padding:10px;border:1.5px solid #ccc;border-radius:8px;font-size:0.9rem;"></textarea></div>
+          <div class="form-group"><label>Growing Conditions:</label><input type="text" id="ciConditions" /></div>
+          <div class="form-group"><label>Common Diseases:</label><input type="text" id="ciDiseases" /></div>
+          <div class="form-group"><label>Harvest Time:</label><input type="text" id="ciHarvest" /></div>
+          <div class="btn-row">
+            <button class="btn btn-back" onclick="hideAll()">Cancel</button>
+            <button class="btn btn-green" onclick="saveCropInfo()">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="alertSection" class="edit-section" style="display:none;">
+        <h3 style="color:#2d5a27;margin-bottom:15px;">✏️ Edit Disease Alert</h3>
+        <div class="form-group"><label>Alert 1:</label><input type="text" id="alert1" value="Brown Planthopper detected in Rajshahi" /></div>
+        <div class="form-group"><label>Alert 2:</label><input type="text" id="alert2" value="Leaf Blight reported in Dhaka district" /></div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="hideAll()">Cancel</button>
+          <button class="btn btn-green" onclick="save('alert')">Save Changes</button>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:20px;">
         <button class="btn btn-back" onclick="history.back()">Back</button>
         <a href="index.html" class="btn btn-back">Return Home</a>
       </div>
-
     </div>
   </div>
 
@@ -104,30 +129,78 @@
       window.location.href = 'login-admin.html';
     }
 
-    function loadUsers() {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const tbody = document.getElementById('usersBody');
-
-      if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#999;">No users yet</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = users.map(u =>
-        `<tr>
-          <td>${u.name}</td>
-          <td style="text-transform:capitalize;">${u.role}</td>
-          <td class="status-active">Active</td>
-        </tr>`
-      ).join('');
-    }
-
-    loadUsers();
-
     function adminLogout() {
       localStorage.removeItem('adminLogged');
     }
-  </script>
 
+    function hideAll() {
+      document.querySelectorAll('.edit-section').forEach(s => s.style.display = 'none');
+    }
+
+    function showSection(name) {
+      hideAll();
+      document.getElementById(name + 'Section').style.display = 'block';
+    }
+
+    function save(type) {
+      if (type === 'fert') {
+        localStorage.setItem('adminFert', JSON.stringify({
+          urea: document.getElementById('fertUrea').value,
+          tsp: document.getElementById('fertTSP').value,
+          mop: document.getElementById('fertMOP').value,
+          gyp: document.getElementById('fertGyp').value,
+        }));
+      } else if (type === 'season') {
+        localStorage.setItem('adminSeasonal', JSON.stringify({
+          summer: document.getElementById('summerCrops').value,
+          winter: document.getElementById('winterCrops').value,
+          rainy: document.getElementById('rainyCrops').value,
+        }));
+      } else if (type === 'alert') {
+        localStorage.setItem('adminAlerts', JSON.stringify({
+          alert1: document.getElementById('alert1').value,
+          alert2: document.getElementById('alert2').value,
+        }));
+      }
+      alert('Saved successfully!');
+      hideAll();
+    }
+
+    const cropDefaults = {
+      Rice: { desc: 'Most important staple food crop in Bangladesh.', conditions: 'Temperature: 20°C-35°C, High rainfall, Clay/Loamy soil', diseases: 'Brown Planthopper, Leaf Blight, Blast Disease', harvest: '120-150 Days' },
+      Wheat: { desc: 'Second most consumed grain after rice.', conditions: 'Temperature: 10°C-25°C, Low to Medium rainfall, Loamy soil', diseases: 'Rust Disease, Powdery Mildew, Aphids', harvest: '110-130 Days' },
+      Tomato: { desc: 'Popular vegetable crop grown in winter and summer.', conditions: 'Temperature: 18°C-30°C, Medium rainfall, Sandy/Loamy soil', diseases: 'Early Blight, Late Blight, Fruit Borer', harvest: '60-90 Days' },
+      Maize: { desc: 'Important cereal crop for food and animal feed.', conditions: 'Temperature: 20°C-30°C, Medium rainfall, Loamy soil', diseases: 'Corn Borer, Leaf Blight, Downy Mildew', harvest: '90-110 Days' },
+      Potato: { desc: 'Important vegetable and cash crop in winter.', conditions: 'Temperature: 10°C-20°C, Cool weather, Loamy soil', diseases: 'Late Blight, Early Blight, Bacterial Wilt', harvest: '70-90 Days' },
+      Jute: { desc: 'Golden fiber of Bangladesh, important cash crop.', conditions: 'Temperature: 25°C-35°C, High rainfall, Clay soil', diseases: 'Stem Rot, Leaf Spot, Hairy Caterpillar', harvest: '100-120 Days' },
+    };
+
+    function loadCropInfo() {
+      const crop = document.getElementById('cropSelect').value;
+      if (!crop) { document.getElementById('cropInfoFields').style.display = 'none'; return; }
+
+      const saved = JSON.parse(localStorage.getItem('cropInfo_' + crop) || 'null');
+      const data = saved || cropDefaults[crop];
+
+      document.getElementById('ciDesc').value = data.desc || '';
+      document.getElementById('ciConditions').value = data.conditions || '';
+      document.getElementById('ciDiseases').value = data.diseases || '';
+      document.getElementById('ciHarvest').value = data.harvest || '';
+      document.getElementById('cropInfoFields').style.display = 'block';
+    }
+
+    function saveCropInfo() {
+      const crop = document.getElementById('cropSelect').value;
+      if (!crop) return;
+      localStorage.setItem('cropInfo_' + crop, JSON.stringify({
+        desc: document.getElementById('ciDesc').value,
+        conditions: document.getElementById('ciConditions').value,
+        diseases: document.getElementById('ciDiseases').value,
+        harvest: document.getElementById('ciHarvest').value,
+      }));
+      alert(crop + ' information updated!');
+      hideAll();
+    }
+  </script>
 </body>
 </html>

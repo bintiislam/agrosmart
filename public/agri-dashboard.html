@@ -7,79 +7,95 @@
 </head>
 <body>
 
-  <!-- Navbar -->
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
     <nav>
-      <span id="welcomeName" style="color: #2d5a27; font-weight:600;"></span>
+      <span id="welcomeName" style="color:#2d5a27; font-weight:600;"></span>
       &nbsp;&nbsp;
       <a href="index.html" onclick="logout()">Logout</a>
     </nav>
   </div>
 
-  
   <div class="dashboard-layout">
-
-    
     <div class="sidebar">
       <a href="profile.html">Profile</a>
-      <a href="crop-info.html">Crop Information</a>
       <a href="crop-recommendation.html">Crop Recommendation</a>
+      <a href="crop-info.html">Crop Information</a>
       <a href="fertilizer-guide.html">Fertilizer Guide</a>
       <a href="seasonal-guide.html">Seasonal Guide</a>
     </div>
 
-    
     <div class="dashboard-content">
 
-      
       <div class="dashboard-header">
         <h2 id="dashWelcome">Welcome! 👷</h2>
-        <p>Today's weather: 28°C &nbsp;|&nbsp; Rajshahi</p>
-        <p>Good day for field work! ✅</p>
+        <p>Role: <strong>Agricultural Worker</strong></p>
       </div>
 
-      
-      <div class="tips-box">
-        <h3>🌱 Latest Tips</h3>
-        <ul>
-          <li>💧 Water early in the morning</li>
-          <li>🌿 Use organic fertilizer</li>
-          <li>🔍 Check crops for disease signs</li>
-        </ul>
-      </div>
-
-      
       <div class="alert-box">
         <h3>⚠️ Disease Alert Section</h3>
-        <ul>
+        <ul id="alertList">
           <li>🟡 Brown Planthopper detected in Rajshahi</li>
           <li>🟡 Leaf Blight reported in Dhaka district</li>
         </ul>
       </div>
 
-      
+      <div class="tips-box" style="border-left: 4px solid #e65100;">
+        <h3>📅 Crop Calendar
+          <span style="font-size:0.72rem;background:#e65100;color:white;padding:2px 10px;border-radius:10px;margin-left:8px;">Worker Only</span>
+        </h3>
+        <p style="font-size:0.85rem;color:#555;margin-bottom:12px;">Current month planting schedule:</p>
+        <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+          <thead>
+            <tr style="background:#fff3e0;">
+              <th style="padding:8px;text-align:left;border-bottom:1px solid #ffe0b2;">Crop</th>
+              <th style="padding:8px;text-align:left;border-bottom:1px solid #ffe0b2;">Action</th>
+              <th style="padding:8px;text-align:left;border-bottom:1px solid #ffe0b2;">Month</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:8px;border-bottom:1px solid #f5f5f5;">🌾 Rice (Aman)</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">Planting</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">June - July</td></tr>
+            <tr><td style="padding:8px;border-bottom:1px solid #f5f5f5;">🌿 Wheat</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">Planting</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">November - December</td></tr>
+            <tr><td style="padding:8px;border-bottom:1px solid #f5f5f5;">🥔 Potato</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">Planting</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">October - November</td></tr>
+            <tr><td style="padding:8px;border-bottom:1px solid #f5f5f5;">🌱 Jute</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">Harvesting</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">July - August</td></tr>
+            <tr><td style="padding:8px;">🍅 Tomato</td><td style="padding:8px;">Planting</td><td style="padding:8px;">February - March</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tips-box" style="border-left: 4px solid #e65100;">
+        <h3>✅ Field Checklist
+          <span style="font-size:0.72rem;background:#e65100;color:white;padding:2px 10px;border-radius:10px;margin-left:8px;">Worker Only</span>
+        </h3>
+        <p style="font-size:0.85rem;color:#555;margin-bottom:10px;">Daily field tasks to complete:</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label style="font-size:0.9rem;cursor:pointer;"><input type="checkbox" style="margin-right:8px;"> Check soil moisture levels</label>
+          <label style="font-size:0.9rem;cursor:pointer;"><input type="checkbox" style="margin-right:8px;"> Inspect crops for disease signs</label>
+          <label style="font-size:0.9rem;cursor:pointer;"><input type="checkbox" style="margin-right:8px;"> Apply fertilizer if scheduled</label>
+          <label style="font-size:0.9rem;cursor:pointer;"><input type="checkbox" style="margin-right:8px;"> Check irrigation system</label>
+          <label style="font-size:0.9rem;cursor:pointer;"><input type="checkbox" style="margin-right:8px;"> Report any pest activity</label>
+        </div>
+      </div>
+
       <div class="btn-row">
         <a href="index.html" class="btn btn-back">Return Home</a>
       </div>
-
     </div>
   </div>
 
   <script>
     const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-
-    if (!user.name) {
-      window.location.href = 'login-page.html?role=worker';
-    }
-
+    if (!user.name) window.location.href = 'login-page.html?role=worker';
     document.getElementById('welcomeName').textContent = user.name || '';
     document.getElementById('dashWelcome').textContent = 'Welcome, ' + (user.name || '') + '! 👷';
 
-    function logout() {
-      localStorage.removeItem('loggedInUser');
+    const alerts = JSON.parse(localStorage.getItem('adminAlerts') || 'null');
+    if (alerts) {
+      document.getElementById('alertList').innerHTML =
+        `<li>🟡 ${alerts.alert1}</li><li>🟡 ${alerts.alert2}</li>`;
     }
-  </script>
 
+    function logout() { localStorage.removeItem('loggedInUser'); }
+  </script>
 </body>
 </html>

@@ -7,7 +7,6 @@
 </head>
 <body>
 
-  
   <div class="navbar">
     <div class="logo">🌿 <span>AgroSmart</span></div>
     <nav>
@@ -17,164 +16,272 @@
     </nav>
   </div>
 
-  
   <div class="dashboard-layout">
-
-    <!-- Sidebar -->
     <div class="sidebar">
-      <a href="admin-dashboard.html" class="active">Profile</a>
-      <a href="admin-dashboard.html">Manage Crops</a>
-      <a href="admin-dashboard.html">Manage Users</a>
+      <a href="admin-dashboard.html" class="active">Manage Crops</a>
       <a href="admin-manage.html">Manage Content</a>
       <a href="seasonal-guide.html">Seasonal Data</a>
       <a href="crop-info.html">Crop Information</a>
       <a href="fertilizer-guide.html">Fertilizer Information</a>
     </div>
 
-    
     <div class="dashboard-content">
 
       
-      <div style="margin-bottom: 30px;">
+      <div style="margin-bottom:30px;">
         <div class="admin-section-title">
           <h3>🌾 Manage Crops</h3>
-          <button class="btn btn-green btn-small" onclick="addCrop()">+ Add Crop</button>
+          <button class="btn btn-green btn-small" onclick="openModal('add')">+ Add Crop</button>
         </div>
-
-        <table class="admin-table" id="cropsTable">
-          <thead>
-            <tr>
-              <th>Crop</th>
-              <th>Season</th>
-              <th>Soil Type</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="cropsBody">
-            <tr>
-              <td>Rice</td>
-              <td>Rainy</td>
-              <td>Clay / Loamy</td>
-              <td>
-                <button class="btn btn-green btn-small" onclick="viewCrop('Rice')">Edit</button>
-                <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Wheat</td>
-              <td>Winter</td>
-              <td>Loamy</td>
-              <td>
-                <button class="btn btn-green btn-small" onclick="viewCrop('Wheat')">Edit</button>
-                <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Maize</td>
-              <td>Summer</td>
-              <td>Loamy</td>
-              <td>
-                <button class="btn btn-green btn-small" onclick="viewCrop('Maize')">Edit</button>
-                <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Potato</td>
-              <td>Winter</td>
-              <td>Loamy</td>
-              <td>
-                <button class="btn btn-green btn-small" onclick="viewCrop('Potato')">Edit</button>
-                <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      
-      <div style="margin-bottom: 30px;">
-        <div class="admin-section-title">
-          <h3>👥 Manage Users</h3>
-          <button class="btn btn-green btn-small">Edit</button>
-        </div>
-
         <table class="admin-table">
           <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Status</th>
-            </tr>
+            <tr><th>Crop</th><th>Season</th><th>Soil Type</th><th>Description</th><th>Action</th></tr>
+          </thead>
+          <tbody id="cropsBody"></tbody>
+        </table>
+      </div>
+
+
+      <div style="margin-bottom:30px;">
+        <div class="admin-section-title">
+          <h3>👥 Manage Users</h3>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr>
           </thead>
           <tbody id="usersBody">
+            <tr><td colspan="5" style="text-align:center;color:#999;">Loading...</td></tr>
           </tbody>
         </table>
       </div>
 
-      
       <div class="btn-row">
-        <a href="index.html" class="btn btn-back">Return Home</a>
+        <a href="ai-assistant.html" class="btn btn-green">🤖 Ask AI Assistant</a>
+      <a href="index.html" class="btn btn-back">Return Home</a>
       </div>
-
     </div>
   </div>
 
-  <script>
+  <div id="cropModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;overflow-y:auto;">
+    <div style="background:white;width:500px;margin:40px auto;padding:30px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+      <h3 id="modalTitle" style="color:#2d5a27;margin-bottom:20px;">✏️ Crop Details</h3>
+
+      <div class="form-group">
+        <label>Crop Name:</label>
+        <input type="text" id="fName" placeholder="e.g. Rice" />
+      </div>
+      <div class="form-group">
+        <label>Season:</label>
+        <select id="fSeason">
+          <option value="Rainy">Rainy</option>
+          <option value="Winter">Winter</option>
+          <option value="Summer">Summer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Soil Type:</label>
+        <input type="text" id="fSoil" placeholder="e.g. Clay / Loamy" />
+      </div>
+      <div class="form-group">
+        <label>Temperature Range:</label>
+        <input type="text" id="fTemp" placeholder="e.g. 20°C - 35°C" />
+      </div>
+      <div class="form-group">
+        <label>Rainfall:</label>
+        <input type="text" id="fRain" placeholder="e.g. High (150cm+)" />
+      </div>
+      <div class="form-group">
+        <label>Short Description:</label>
+        <textarea id="fDesc" rows="3" style="width:100%;padding:10px;border:1.5px solid #ccc;border-radius:8px;font-size:0.9rem;" placeholder="Write a short description about this crop..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Common Diseases (comma separated):</label>
+        <input type="text" id="fDiseases" placeholder="e.g. Leaf Blight, Brown Planthopper" />
+      </div>
+      <div class="form-group">
+        <label>Fertilizer (e.g. Urea:80, TSP:55):</label>
+        <input type="text" id="fFert" placeholder="e.g. Urea:80 kg/acre, TSP:55 kg/acre" />
+      </div>
+      <div class="form-group">
+        <label>Harvest Time:</label>
+        <input type="text" id="fHarvest" placeholder="e.g. 120 - 150 Days" />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-green" onclick="saveCrop()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB2C0Uf6NWWqUkp3kCAeAoFXq7k5GeVzgc",
+      authDomain: "agrosmart-4e1fe.firebaseapp.com",
+      projectId: "agrosmart-4e1fe",
+      storageBucket: "agrosmart-4e1fe.firebasestorage.app",
+      messagingSenderId: "448300580974",
+      appId: "1:448300580974:web:0ae670c92892f1ae77267f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     if (localStorage.getItem('adminLogged') !== 'true') {
       window.location.href = 'login-admin.html';
     }
 
-    function loadUsers() {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const tbody = document.getElementById('usersBody');
 
-      if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#999;">No users registered yet</td></tr>';
-        return;
+    let crops = JSON.parse(localStorage.getItem('adminCrops') || 'null');
+    if (!crops) {
+      crops = [
+        { id: 1, name: 'Rice', season: 'Rainy', soil: 'Clay / Loamy', temp: '20°C - 35°C', rain: 'High (150cm+)', desc: 'Most important staple food crop in Bangladesh. Grows in waterlogged conditions.', diseases: 'Brown Planthopper, Leaf Blight, Blast Disease', fert: 'Urea: 80 kg/acre, TSP: 55 kg/acre, MOP: 40 kg/acre', harvest: '120 - 150 Days' },
+        { id: 2, name: 'Wheat', season: 'Winter', soil: 'Loamy', temp: '10°C - 25°C', rain: 'Low to Medium (50-75cm)', desc: 'Second most consumed grain after rice. Grown in winter season.', diseases: 'Rust Disease, Powdery Mildew, Aphids', fert: 'Urea: 65 kg/acre, TSP: 50 kg/acre, MOP: 30 kg/acre', harvest: '110 - 130 Days' },
+        { id: 3, name: 'Tomato', season: 'Summer', soil: 'Sandy / Loamy', temp: '18°C - 30°C', rain: 'Medium (75-100cm)', desc: 'Popular vegetable crop grown in both winter and summer.', diseases: 'Early Blight, Late Blight, Fruit Borer', fert: 'Urea: 70 kg/acre, TSP: 60 kg/acre, MOP: 50 kg/acre', harvest: '60 - 90 Days' },
+        { id: 4, name: 'Maize', season: 'Summer', soil: 'Loamy', temp: '20°C - 30°C', rain: 'Medium', desc: 'Important cereal crop used for food and animal feed.', diseases: 'Corn Borer, Leaf Blight, Downy Mildew', fert: 'Urea: 90 kg/acre, TSP: 60 kg/acre, MOP: 40 kg/acre', harvest: '90 - 110 Days' },
+        { id: 5, name: 'Potato', season: 'Winter', soil: 'Loamy', temp: '10°C - 20°C', rain: 'Low to Medium', desc: 'Important vegetable and cash crop grown in winter.', diseases: 'Late Blight, Early Blight, Bacterial Wilt', fert: 'Urea: 75 kg/acre, TSP: 55 kg/acre, MOP: 60 kg/acre', harvest: '70 - 90 Days' },
+        { id: 6, name: 'Jute', season: 'Rainy', soil: 'Clay', temp: '25°C - 35°C', rain: 'High', desc: 'Golden fiber of Bangladesh. One of the most important cash crops.', diseases: 'Stem Rot, Leaf Spot, Hairy Caterpillar', fert: 'Urea: 60 kg/acre, TSP: 40 kg/acre, MOP: 30 kg/acre', harvest: '100 - 120 Days' },
+      ];
+      localStorage.setItem('adminCrops', JSON.stringify(crops));
+    }
+
+    let editingId = null;
+    let modalMode = 'add';
+
+    function renderCrops() {
+      document.getElementById('cropsBody').innerHTML = crops.map(c => `
+        <tr>
+          <td><strong>${c.name}</strong></td>
+          <td>${c.season}</td>
+          <td>${c.soil}</td>
+          <td style="font-size:0.82rem;color:#666;max-width:200px;">${c.desc ? c.desc.substring(0,60)+'...' : '-'}</td>
+          <td>
+            <button class="btn btn-green btn-small" onclick="openModal('edit', ${c.id})">Edit</button>
+            <button class="btn btn-back btn-small" style="margin-left:5px;" onclick="deleteCrop(${c.id})">Delete</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    window.openModal = function(mode, id) {
+      modalMode = mode;
+      if (mode === 'add') {
+        document.getElementById('modalTitle').textContent = '➕ Add New Crop';
+        document.getElementById('fName').value = '';
+        document.getElementById('fSeason').value = 'Rainy';
+        document.getElementById('fSoil').value = '';
+        document.getElementById('fTemp').value = '';
+        document.getElementById('fRain').value = '';
+        document.getElementById('fDesc').value = '';
+        document.getElementById('fDiseases').value = '';
+        document.getElementById('fFert').value = '';
+        document.getElementById('fHarvest').value = '';
+        editingId = null;
+      } else {
+        const c = crops.find(x => x.id === id);
+        if (!c) return;
+        editingId = id;
+        document.getElementById('modalTitle').textContent = '✏️ Edit Crop: ' + c.name;
+        document.getElementById('fName').value = c.name;
+        document.getElementById('fSeason').value = c.season;
+        document.getElementById('fSoil').value = c.soil;
+        document.getElementById('fTemp').value = c.temp || '';
+        document.getElementById('fRain').value = c.rain || '';
+        document.getElementById('fDesc').value = c.desc || '';
+        document.getElementById('fDiseases').value = c.diseases || '';
+        document.getElementById('fFert').value = c.fert || '';
+        document.getElementById('fHarvest').value = c.harvest || '';
       }
+      document.getElementById('cropModal').style.display = 'block';
+    }
 
-      tbody.innerHTML = users.map(u =>
-        `<tr>
-          <td>${u.name}</td>
-          <td style="text-transform:capitalize;">${u.role}</td>
-          <td class="status-active">Active</td>
-        </tr>`
-      ).join('');
+    window.closeModal = function() {
+      document.getElementById('cropModal').style.display = 'none';
+    }
+
+    window.saveCrop = function() {
+      const name = document.getElementById('fName').value.trim();
+      const season = document.getElementById('fSeason').value;
+      const soil = document.getElementById('fSoil').value.trim();
+      if (!name || !soil) { alert('Crop name and soil type are required!'); return; }
+
+      const cropData = {
+        name, season, soil,
+        temp: document.getElementById('fTemp').value.trim(),
+        rain: document.getElementById('fRain').value.trim(),
+        desc: document.getElementById('fDesc').value.trim(),
+        diseases: document.getElementById('fDiseases').value.trim(),
+        fert: document.getElementById('fFert').value.trim(),
+        harvest: document.getElementById('fHarvest').value.trim(),
+      };
+
+      if (modalMode === 'add') {
+        cropData.id = Date.now();
+        crops.push(cropData);
+        alert('Crop added successfully!');
+      } else {
+        crops = crops.map(c => c.id === editingId ? {...cropData, id: editingId} : c);
+        alert('Crop updated successfully!');
+      }
+      localStorage.setItem('adminCrops', JSON.stringify(crops));
+      renderCrops();
+      closeModal();
+    }
+
+    window.deleteCrop = function(id) {
+      if (confirm('Delete this crop?')) {
+        crops = crops.filter(c => c.id !== id);
+        localStorage.setItem('adminCrops', JSON.stringify(crops));
+        renderCrops();
+      }
+    }
+
+    renderCrops();
+
+
+    async function loadUsers() {
+      const tbody = document.getElementById('usersBody');
+      try {
+        const snapshot = await getDocs(collection(db, "users"));
+        if (snapshot.empty) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;">No users registered yet</td></tr>';
+          return;
+        }
+        tbody.innerHTML = snapshot.docs.map(d => {
+          const u = d.data();
+          return `<tr>
+            <td>${u.name || '-'}</td>
+            <td>${u.email || '-'}</td>
+            <td style="text-transform:capitalize;">${u.role || '-'}</td>
+            <td class="status-active">Active</td>
+            <td><button class="btn btn-back btn-small" onclick="removeUser('${d.id}', this)">Remove</button></td>
+          </tr>`;
+        }).join('');
+      } catch(e) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#f00;">Error loading users</td></tr>';
+      }
+    }
+
+    window.removeUser = async function(docId, btn) {
+      if (confirm('Remove this user?')) {
+        try {
+          await deleteDoc(doc(db, "users", docId));
+          btn.closest('tr').remove();
+          alert('User removed!');
+        } catch(e) {
+          alert('Error: ' + e.message);
+        }
+      }
     }
 
     loadUsers();
 
-    function deleteCrop(btn) {
-      if (confirm('Are you sure you want to delete this crop?')) {
-        btn.closest('tr').remove();
-      }
-    }
-
-    function viewCrop(crop) {
-      window.location.href = 'crop-database.html?crop=' + crop;
-    }
-
-    function addCrop() {
-      const name = prompt('Enter crop name:');
-      if (name) {
-        const tbody = document.getElementById('cropsBody');
-        const newRow = `<tr>
-          <td>${name}</td>
-          <td>-</td>
-          <td>-</td>
-          <td>
-            <button class="btn btn-green btn-small">Edit</button>
-            <button class="btn btn-back btn-small" onclick="deleteCrop(this)">Delete</button>
-          </td>
-        </tr>`;
-        tbody.innerHTML += newRow;
-      }
-    }
-
-    function adminLogout() {
+    window.adminLogout = function() {
       localStorage.removeItem('adminLogged');
     }
   </script>
-
 </body>
 </html>
